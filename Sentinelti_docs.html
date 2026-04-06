@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SentinelTI — Threat Intelligence Docs</title>
+<title>SentinelTI — Threat Intelligence </title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -378,10 +378,6 @@ tr:hover td{background:var(--surface2);}
         <p>SentinelTI is an asynchronous threat intelligence platform that addresses three core failure modes of traditional blacklist-based systems: <strong>high false-positive rates</strong>, <strong>opaque decision-making</strong>, and <strong>delayed threat visibility</strong>.</p>
         <p>The framework ingests IP indicators from open-source feeds in real time, enriches them asynchronously with contextual data, and runs a stacking ensemble of <strong>Random Forest + XGBoost</strong> to produce a dynamic maliciousness risk score. Every score is fully explained using <strong>SHAP</strong> (SHapley Additive exPlanations), giving SOC analysts transparent, evidence-based reasoning.</p>
 
-        <div class="callout">
-          <div class="callout-title">📄 Research Paper</div>
-          <p>SentinelTI is the subject of an IEEE conference paper — <em>"An Explainable Machine Learning Framework for IP Threat Intelligence and Maliciousness Risk Scoring"</em> by Soham Shah &amp; Mousmi Pawar, Somaiya Vidyavihar University.</p>
-        </div>
 
         <h2 class="section-title">Core Problems Solved</h2>
         <table>
@@ -502,14 +498,48 @@ streamlit run dashboard/app.py --server.port 8501</pre>
         </div>
 
         <div class="callout">
-          <div class="callout-title">✅ Success</div>
+          <div class="callout-title"> Success</div>
           <p>Once running, you should see IOCs populating in the dashboard within ~30 seconds. The enrichment pipeline runs asynchronously — full SHAP scores appear within ~60 seconds of ingestion.</p>
         </div>
 
         <h2 class="section-title">Project Structure</h2>
         <div class="code-block">
           <div class="code-header"><span class="code-lang">tree</span></div>
-          <pre>sentinel_TI/
+          <pre>{`
+┌─ External Threat Feeds ─────────────────┐
+│  Abuse.ch  │  CINS Army  │  Others      │
+└─────────────────┬───────────────────────┘
+                  │
+                  ▼
+┌─ Fast IOC Ingestion ───────────────────┐
+│  Normalize  │  Deduplicate  │  Validate │
+└─────────────────┬───────────────────────┘
+                  │
+                  ▼
+          ┌─ MongoDB ─┐  (Live to Dashboard)
+          │   IOCs    │
+          └─────┬─────┘
+                │
+         ┌──────▼──────┐
+         │   Async     │
+         │ Enrichment  │
+         │  Pipeline   │
+         └──────┬──────┘
+                │
+         ┌──────▼──────┐
+         │ ML Scoring  │
+         │  (Stacking) │
+         └──────┬──────┘
+                │
+         ┌──────▼──────┐
+         │ SHAP Explain│
+         │   (Local)   │
+         └──────┬──────┘
+                │
+              ▼ ▼ ▼
+      [LOW] [MED] [HIGH] ← SOC Dashboard
+            `}</pre>
+          <!-- <pre>sentinel_TI/
 ├── <span class="hl-cyan">src/</span>
 │   ├── <span class="hl-cyan">ingestion/</span>        <span class="hl-amber"># IOC feed collectors</span>
 │   │   ├── ingest.py
@@ -535,7 +565,7 @@ streamlit run dashboard/app.py --server.port 8501</pre>
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
-└── .env</pre>
+└── .env</pre> -->
         </div>
 
         <div class="doc-nav">
@@ -556,25 +586,25 @@ streamlit run dashboard/app.py --server.port 8501</pre>
         <h2 class="section-title">Full Pipeline</h2>
         <div class="pipeline" id="arch-pipeline">
           <div class="pipeline-step">
-            <div class="step-body"><h4>📡 External Threat Feeds</h4><p>Abuse.ch (primary) · CINS Army (supplementary) — real-time, public IP IOC streams</p></div>
+            <div class="step-body"><h4> External Threat Feeds</h4><p>Abuse.ch (primary) · CINS Army (supplementary) — real-time, public IP IOC streams</p></div>
           </div>
           <div class="pipeline-step">
-            <div class="step-body"><h4>⚡ Fast IOC Ingestion</h4><p>Normalize, deduplicate, validate. Limit: 200 IOCs per cycle. Stored to MongoDB immediately for zero-latency dashboard visibility.</p></div>
+            <div class="step-body"><h4> Fast IOC Ingestion</h4><p>Normalize, deduplicate, validate. Limit: 200 IOCs per cycle. Stored to MongoDB immediately for zero-latency dashboard visibility.</p></div>
           </div>
           <div class="pipeline-step">
-            <div class="step-body"><h4>🔍 Async Enrichment</h4><p>VirusTotal (vendor detections) · AbuseIPDB (historical abuse + confidence) · GeoIP · ASN — runs in background, does not block ingestion</p></div>
+            <div class="step-body"><h4> Async Enrichment</h4><p>VirusTotal (vendor detections) · AbuseIPDB (historical abuse + confidence) · GeoIP · ASN — runs in background, does not block ingestion</p></div>
           </div>
           <div class="pipeline-step">
-            <div class="step-body"><h4>💾 MongoDB IOC Store</h4><p>Stores timestamps, enrichment status, raw features, and computed scores. Provides both ingestion-time and enrichment-time snapshots.</p></div>
+            <div class="step-body"><h4>  MongoDB IOC Store</h4><p>Stores timestamps, enrichment status, raw features, and computed scores. Provides both ingestion-time and enrichment-time snapshots.</p></div>
           </div>
           <div class="pipeline-step">
-            <div class="step-body"><h4>🤖 ML Risk Scoring Engine</h4><p>Random Forest + XGBoost stacking ensemble. Outputs a continuous risk score in [0, 1] per IP.</p></div>
+            <div class="step-body"><h4> ML Risk Scoring Engine</h4><p>Random Forest + XGBoost stacking ensemble. Outputs a continuous risk score in [0, 1] per IP.</p></div>
           </div>
           <div class="pipeline-step">
-            <div class="step-body"><h4>✨ SHAP Explainability</h4><p>Global feature importance + local per-IP SHAP values. Makes every risk score fully auditable.</p></div>
+            <div class="step-body"><h4> SHAP Explainability</h4><p>Global feature importance + local per-IP SHAP values. Makes every risk score fully auditable.</p></div>
           </div>
           <div class="pipeline-step">
-            <div class="step-body"><h4>📊 Actionable SOC Dashboard</h4><p>Three-tier risk display: LOW / MEDIUM / HIGH. Colour-coded, sortable, evidence-based decisions.</p></div>
+            <div class="step-body"><h4> Actionable SOC Dashboard</h4><p>Three-tier risk display: LOW / MEDIUM / HIGH. Colour-coded, sortable, evidence-based decisions.</p></div>
           </div>
         </div>
 
@@ -588,7 +618,7 @@ streamlit run dashboard/app.py --server.port 8501</pre>
         </ol>
 
         <div class="callout info">
-          <div class="callout-title">💡 Design Rationale</div>
+          <div class="callout-title"> Design Rationale</div>
           <p>This two-phase approach ensures analysts see IOCs within seconds of ingestion (before enrichment), while full ML-scored records with SHAP explanations appear within ~60 seconds — far below the hours-long lag of traditional blacklist-based systems.</p>
         </div>
 
@@ -695,7 +725,7 @@ xgb_probs = xgb.predict_proba(X_test)[:, <span class="hl-cyan">1</span>]</pre>
         <div class="formula">P_final(y=1|xᵢ) = sigmoid(ŷᵢ_stack)</div>
 
         <div class="callout">
-          <div class="callout-title">💡 Why a linear meta-learner?</div>
+          <div class="callout-title"> Why a linear meta-learner?</div>
           <p>The β₁ and β₂ coefficients are directly interpretable — they expose the relative trust placed in each base model. This keeps the entire stack explainable at every hierarchy level while still gaining the performance benefit of ensembling.</p>
         </div>
 
@@ -747,7 +777,7 @@ final_scores = meta.predict_proba(Z_test)[:, <span class="hl-cyan">1</span>]
         </div>
 
         <div class="callout info">
-          <div class="callout-title">🔍 Key Insight</div>
+          <div class="callout-title"> Key Insight</div>
           <p>Confidence Score and Abuse Reports dominate, validating that the model correctly learns from the most behaviorally significant threat signals rather than spurious correlates.</p>
         </div>
 
