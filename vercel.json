@@ -1,6 +1,0 @@
-{
-  "routes": [
-    { "src": "/", "dest": "/public/sentinelti_docs.html" },
-    { "src": "/sentinelti_docs.html", "dest": "/public/sentinelti_docs.html" }
-  ]
-}
