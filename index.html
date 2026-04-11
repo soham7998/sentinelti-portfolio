@@ -584,8 +584,17 @@ streamlit run dashboard/app.py --server.port 8501</pre>
       <div class="pd-risk-chip med">MEDIUM</div>
       <div class="pd-risk-chip high">HIGH</div>
     </div>
- 
-  </div><!-- /pipeline-diagram -->
+  </div>
+        
+<h2 class="section-title" id="arch-enrichment">Async Enrichment Detail</h2>
+  <p>The core architectural decision is the <strong>separation of ingestion from enrichment</strong>. When a new IOC arrives:</p>
+  <ol style="padding-left:20px;margin:16px 0;line-height:2.2;font-size:14px;color:var(--text)">
+    <li>Stored immediately in MongoDB with <code>enriched: false</code> — visible on SOC dashboard instantly.</li>
+    <li>Background worker calls <strong>VirusTotal</strong>, <strong>AbuseIPDB</strong>, <strong>IPInfo</strong> (location/ASN/privacy), and ASN APIs asynchronously.</li>
+    <li>Once enrichment completes, the feature vector is assembled and scored by the ML pipeline.</li>
+    <li>Risk score and SHAP values are written back to MongoDB, updating the dashboard in real time.</li>
+  </ol
+        <!-- /pipeline-diagram -->
         <!-- <div class="code-block">
           <div class="code-header"><span class="code-lang">tree</span></div>
           <pre>
