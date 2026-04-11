@@ -3,257 +3,176 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-
 <title>SentinelTI — Threat Intelligence</title>
-
-<!-- Favicon -->
 <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
-<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
-
-<!-- Theme color (mobile browser top bar) -->
 <meta name="theme-color" content="#00e676">
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#080e11;
-  --surface:#0d1a1f;
-  --surface2:#112028;
-  --border:#1a3040;
-  --border-bright:#1e4a5e;
-  --green:#00e676;
-  --green-dim:#00b35a;
-  --green-muted:#00e67622;
-  --cyan:#00e5ff;
-  --cyan-dim:#0097a7;
-  --amber:#ffb300;
-  --red:#ff4444;
-  --text:#c8d8e0;
-  --text-muted:#5a7a88;
-  --text-bright:#e8f4f8;
-  --sidebar-w:260px;
+  --bg:#080e11;--surface:#0d1a1f;--surface2:#112028;
+  --border:#1a3040;--border-bright:#1e4a5e;
+  --green:#00e676;--green-dim:#00b35a;--green-muted:#00e67622;
+  --cyan:#00e5ff;--cyan-dim:#0097a7;
+  --amber:#ffb300;--red:#ff4444;
+  --text:#c8d8e0;--text-muted:#5a7a88;--text-bright:#e8f4f8;
+  --sidebar-w:268px;
   --font-mono:'JetBrains Mono',monospace;
   --font-display:'Syne',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font-display);min-height:100vh;display:flex;flex-direction:column}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,230,118,0.012) 2px,rgba(0,230,118,0.012) 4px);pointer-events:none;z-index:9999;}
 
-/* SCANLINE OVERLAY */
-body::before{
-  content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,230,118,0.012) 2px,rgba(0,230,118,0.012) 4px);
-  pointer-events:none;z-index:9999;
-}
-
-/* TOP NAV */
-.topnav{
-  position:fixed;top:0;left:0;right:0;height:56px;
-  background:rgba(8,14,17,0.9);backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 20px;gap:16px;z-index:100;
-}
-.topnav-brand{
-  display:flex;align-items:center;gap:10px;text-decoration:none;
-  font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--green);letter-spacing:-0.5px;
-}
-.topnav-brand .shield{
-  width:28px;height:28px;background:var(--green-muted);border:1px solid var(--green);
-  border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;
-}
-.topnav-links{display:flex;gap:4px;margin-left:auto;}
-.topnav-links a{
-  color:var(--text-muted);font-size:13px;text-decoration:none;padding:6px 12px;border-radius:6px;
-  transition:all .2s;font-family:var(--font-mono);
-}
-.topnav-links a:hover{color:var(--green);background:var(--green-muted);}
-.topnav-links a.active{color:var(--green);background:var(--green-muted);}
-.topnav-links .btn-gh{
-  border:1px solid var(--border-bright);color:var(--text);
-}
-.topnav-links .btn-gh:hover{border-color:var(--green);color:var(--green);}
-.version-tag{
-  font-family:var(--font-mono);font-size:11px;color:var(--text-muted);
-  background:var(--surface2);border:1px solid var(--border);padding:2px 8px;border-radius:20px;
-}
+/* NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(8,14,17,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;z-index:100;}
+.topnav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--font-display);font-weight:800;font-size:17px;color:var(--green);letter-spacing:-.5px;}
+.topnav-brand .shield{width:28px;height:28px;background:var(--green-muted);border:1px solid var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.version-tag{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);background:var(--surface2);border:1px solid var(--border);padding:2px 8px;border-radius:20px;}
+.topnav-links{display:flex;gap:6px;margin-left:auto;align-items:center;}
+.topnav-links a{color:var(--text-muted);font-size:12px;text-decoration:none;padding:6px 12px;border-radius:6px;transition:all .2s;font-family:var(--font-mono);border:1px solid var(--border-bright);color:var(--text);}
+.topnav-links a:hover{border-color:var(--green);color:var(--green);}
+.status-dot-wrap{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:11px;color:var(--green);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* LAYOUT */
 .layout{display:flex;padding-top:56px;min-height:100vh;}
 
 /* SIDEBAR */
-.sidebar{
-  width:var(--sidebar-w);flex-shrink:0;
-  position:fixed;top:56px;left:0;bottom:0;overflow-y:auto;
-  background:var(--surface);border-right:1px solid var(--border);
-  padding:20px 0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;
-}
-.sidebar-section{margin-bottom:24px;}
-.sidebar-section-title{
-  font-family:var(--font-mono);font-size:10px;letter-spacing:2px;
-  color:var(--text-muted);text-transform:uppercase;padding:0 20px;margin-bottom:6px;
-}
-.sidebar-link{
-  display:block;padding:7px 20px;color:var(--text-muted);text-decoration:none;
-  font-size:13px;font-family:var(--font-mono);border-left:2px solid transparent;
-  transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.sidebar-link:hover{color:var(--text-bright);background:var(--green-muted);border-left-color:var(--green-dim);}
-.sidebar-link.active{color:var(--green);background:var(--green-muted);border-left-color:var(--green);}
-.sidebar-link .badge{
-  font-size:9px;padding:1px 5px;border-radius:3px;margin-left:6px;
-  background:var(--green);color:#000;vertical-align:middle;font-weight:700;
-}
-.sidebar-link .badge.new{background:var(--amber);color:#000;}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;position:fixed;top:56px;left:0;bottom:0;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:16px 12px 24px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;display:flex;flex-direction:column;gap:3px;}
+.nav-page{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;border:1px solid transparent;text-decoration:none;transition:all .18s;position:relative;user-select:none;}
+.nav-page:hover{background:var(--green-muted);border-color:var(--border-bright);}
+.nav-page.active{background:linear-gradient(135deg,rgba(0,230,118,.13),rgba(0,229,255,.05));border-color:var(--green);}
+.nav-page.active::before{content:'';position:absolute;left:-12px;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--green);border-radius:0 2px 2px 0;}
+.nav-page-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border);transition:all .18s;}
+.nav-page.active .nav-page-icon{background:var(--green-muted);border-color:var(--green);}
+.nav-page-text{flex:1;min-width:0;}
+.nav-page-label{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--text-muted);display:block;line-height:1.2;transition:color .18s;}
+.nav-page:hover .nav-page-label,.nav-page.active .nav-page-label{color:var(--text-bright);}
+.nav-page.active .nav-page-label{color:var(--green);}
+.nav-page-desc{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);display:block;margin-top:2px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nav-page-arrow{font-size:11px;color:var(--text-muted);transition:all .18s;flex-shrink:0;}
+.nav-page.active .nav-page-arrow{color:var(--green);}
+.nav-sub{display:none;flex-direction:column;gap:1px;padding:3px 0 5px 52px;}
+.nav-sub.open{display:flex;}
+.nav-sub-link{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);text-decoration:none;padding:5px 8px;border-radius:5px;transition:all .15s;border-left:1px solid var(--border);}
+.nav-sub-link:hover{color:var(--green);border-left-color:var(--green);background:var(--green-muted);}
+.nav-divider{height:1px;background:var(--border);margin:6px 4px;}
+.nav-badge{font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto;font-weight:700;font-family:var(--font-mono);flex-shrink:0;}
+.nav-badge.green{background:var(--green);color:#000;}
+.nav-badge.amber{background:var(--amber);color:#000;}
+.sidebar-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.sidebar-footer a{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);text-decoration:none;transition:all .15s;}
+.sidebar-footer a:hover{color:var(--green);background:var(--green-muted);}
 
 /* MAIN */
-.main{
-  margin-left:var(--sidebar-w);flex:1;min-width:0;
-  display:flex;
-}
-.content{
-  flex:1;max-width:860px;padding:48px 56px 80px;
-}
-.toc{
-  width:220px;flex-shrink:0;padding:48px 24px;
-  position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;
-}
+.main{margin-left:var(--sidebar-w);flex:1;min-width:0;display:flex;}
+.content{flex:1;max-width:860px;padding:48px 52px 80px;}
+.toc{width:210px;flex-shrink:0;padding:48px 20px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;}
 .toc-title{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;font-family:var(--font-mono);margin-bottom:12px;}
 .toc-link{display:block;font-size:12px;color:var(--text-muted);text-decoration:none;padding:4px 0;font-family:var(--font-mono);transition:color .15s;}
-.toc-link:hover,.toc-link.active{color:var(--green);}
+.toc-link:hover{color:var(--green);}
 .toc-link.sub{padding-left:12px;font-size:11px;}
+.page{display:none;}.page.active{display:block;}
 
-/* PAGE SECTIONS */
-.page{display:none;}
-.page.active{display:block;}
-
-/* CONTENT STYLES */
-.doc-hero{
-  margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);
-}
+/* CONTENT */
+.doc-hero{margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);}
 .breadcrumb{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);margin-bottom:16px;}
 .breadcrumb span{color:var(--green);}
-h1.doc-title{
-  font-size:36px;font-weight:800;color:var(--text-bright);line-height:1.1;margin-bottom:12px;
-  background:linear-gradient(135deg,var(--green) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+h1.doc-title{font-size:36px;font-weight:800;line-height:1.1;margin-bottom:12px;background:linear-gradient(135deg,var(--green) 0%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .doc-subtitle{font-size:16px;color:var(--text-muted);line-height:1.6;}
-h2.section-title{
-  font-size:22px;font-weight:700;color:var(--text-bright);margin:40px 0 16px;
-  display:flex;align-items:center;gap:10px;
-}
-h2.section-title::before{
-  content:'';display:inline-block;width:4px;height:22px;background:var(--green);border-radius:2px;
-}
+h2.section-title{font-size:22px;font-weight:700;color:var(--text-bright);margin:40px 0 16px;display:flex;align-items:center;gap:10px;}
+h2.section-title::before{content:'';display:inline-block;width:4px;height:22px;background:var(--green);border-radius:2px;}
 h3.sub-title{font-size:16px;font-weight:700;color:var(--cyan);margin:28px 0 10px;font-family:var(--font-mono);}
 p{font-size:14.5px;line-height:1.75;color:var(--text);margin-bottom:14px;}
 .lead{font-size:16px;color:var(--text-bright);}
-a{color:var(--green);text-decoration:none;}
-a:hover{text-decoration:underline;}
+a{color:var(--green);text-decoration:none;}a:hover{text-decoration:underline;}
 
-/* CALLOUT */
-.callout{
-  border-left:3px solid var(--green);background:var(--green-muted);
-  padding:14px 18px;border-radius:0 8px 8px 0;margin:20px 0;
-}
-.callout.info{border-color:var(--cyan);background:rgba(0,229,255,0.06);}
-.callout.warn{border-color:var(--amber);background:rgba(255,179,0,0.06);}
+.callout{border-left:3px solid var(--green);background:var(--green-muted);padding:14px 18px;border-radius:0 8px 8px 0;margin:20px 0;}
+.callout.info{border-color:var(--cyan);background:rgba(0,229,255,.06);}
+.callout.warn{border-color:var(--amber);background:rgba(255,179,0,.06);}
 .callout .callout-title{font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:1px;color:var(--green);text-transform:uppercase;margin-bottom:6px;}
 .callout.info .callout-title{color:var(--cyan);}
 .callout.warn .callout-title{color:var(--amber);}
 .callout p{margin:0;font-size:13.5px;}
 
-/* CODE BLOCK */
 .code-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:20px 0;}
-.code-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);
-}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);}
 .code-lang{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
-.code-copy{
-  font-family:var(--font-mono);font-size:11px;color:var(--text-muted);cursor:pointer;
-  background:none;border:1px solid var(--border);padding:3px 10px;border-radius:4px;transition:all .2s;
-}
+.code-copy{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);cursor:pointer;background:none;border:1px solid var(--border);padding:3px 10px;border-radius:4px;transition:all .2s;}
 .code-copy:hover{color:var(--green);border-color:var(--green);}
 pre{padding:20px;overflow-x:auto;font-family:var(--font-mono);font-size:13px;line-height:1.7;color:#aed6e8;}
 .code-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface2);}
-.code-tab{
-  font-family:var(--font-mono);font-size:12px;padding:8px 16px;cursor:pointer;
-  color:var(--text-muted);border-bottom:2px solid transparent;transition:all .15s;
-}
+.code-tab{font-family:var(--font-mono);font-size:12px;padding:8px 16px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:all .15s;}
 .code-tab.active{color:var(--green);border-bottom-color:var(--green);}
-.code-pane{display:none;}
-.code-pane.active{display:block;}
-
-/* INLINE CODE */
+.code-pane{display:none;}.code-pane.active{display:block;}
 code{font-family:var(--font-mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);}
 
-/* TABLE */
 table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13.5px;}
 th{background:var(--surface2);padding:10px 14px;text-align:left;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border-bright);}
 td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);}
 tr:hover td{background:var(--surface2);}
 .pill{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-family:var(--font-mono);}
-.pill.green{background:rgba(0,230,118,0.15);color:var(--green);border:1px solid rgba(0,230,118,0.3);}
-.pill.amber{background:rgba(255,179,0,0.15);color:var(--amber);border:1px solid rgba(255,179,0,0.3);}
-.pill.red{background:rgba(255,68,68,0.15);color:var(--red);border:1px solid rgba(255,68,68,0.3);}
-.pill.cyan{background:rgba(0,229,255,0.12);color:var(--cyan);border:1px solid rgba(0,229,255,0.3);}
+.pill.green{background:rgba(0,230,118,.15);color:var(--green);border:1px solid rgba(0,230,118,.3);}
+.pill.amber{background:rgba(255,179,0,.15);color:var(--amber);border:1px solid rgba(255,179,0,.3);}
+.pill.red{background:rgba(255,68,68,.15);color:var(--red);border:1px solid rgba(255,68,68,.3);}
+.pill.cyan{background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.3);}
 
-/* METRIC CARDS */
 .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0;}
-.metric-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;
-  text-align:center;transition:border-color .2s;
-}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;transition:border-color .2s;}
 .metric-card:hover{border-color:var(--green);}
 .metric-val{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--green);line-height:1;}
 .metric-label{font-size:11px;color:var(--text-muted);margin-top:6px;font-family:var(--font-mono);}
 .metric-target{font-size:10px;color:var(--text-muted);margin-top:4px;}
 
-/* PIPELINE STEPS */
-.pipeline{display:flex;flex-direction:column;gap:0;margin:20px 0;}
-.pipeline-step{
-  display:flex;gap:16px;padding:16px 0;
-  border-left:2px solid var(--border);margin-left:12px;padding-left:24px;position:relative;
-}
-.pipeline-step::before{
-  content:'';position:absolute;left:-6px;top:20px;
-  width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--bg);
-}
-.pipeline-step:last-child{border-left-color:transparent;}
-.step-num{
-  font-family:var(--font-mono);font-size:10px;color:var(--green);
-  background:var(--green-muted);border:1px solid var(--green);
-  width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-weight:700;
-}
-.step-body h4{font-size:13px;font-weight:700;color:var(--text-bright);margin-bottom:4px;}
-.step-body p{font-size:12.5px;margin:0;color:var(--text-muted);}
+/* ═══ PIPELINE DIAGRAM ═══ */
+.pipeline-diagram{display:flex;flex-direction:column;align-items:center;gap:0;margin:28px 0;padding:32px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;}
+.pd-node{width:100%;max-width:400px;background:var(--surface2);border:1.5px solid var(--border-bright);border-radius:10px;padding:14px 22px;text-align:center;position:relative;transition:border-color .2s,box-shadow .2s;cursor:default;}
+.pd-node:hover{border-color:var(--green);box-shadow:0 0 20px rgba(0,230,118,.12);}
+.pd-node.accent{border-color:rgba(0,230,118,.5);background:linear-gradient(135deg,rgba(0,230,118,.07),rgba(0,229,255,.03));}
+.pd-node-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:9px;font-weight:700;background:var(--green);color:#000;padding:2px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;}
+.pd-node-badge.amber{background:var(--amber);}
+.pd-node-badge.cyan{background:var(--cyan);}
+.pd-node-title{font-family:var(--font-display);font-size:13.5px;font-weight:700;color:var(--text-bright);margin-bottom:5px;}
+.pd-node-sub{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:1.7;}
+.pd-node-sub .hi{color:var(--cyan);}
+.pd-node-sub .hi-g{color:var(--green);}
 
-/* FEATURE GRID */
+/* DB cylinder */
+.pd-db-wrap{position:relative;width:100%;max-width:400px;margin:0;}
+.pd-db-cap{width:80%;margin:0 auto;height:18px;background:var(--surface);border:1.5px solid var(--border-bright);border-radius:50%;position:relative;z-index:2;transition:border-color .2s;}
+.pd-db-body{background:var(--surface2);border:1.5px solid var(--border-bright);border-top:none;border-bottom:none;padding:12px 22px;text-align:center;transition:border-color .2s;}
+.pd-db-cap-bot{width:80%;margin:0 auto;height:18px;background:var(--surface2);border:1.5px solid var(--border-bright);border-radius:50%;position:relative;z-index:2;transition:border-color .2s;}
+.pd-db-wrap:hover .pd-db-cap,.pd-db-wrap:hover .pd-db-body,.pd-db-wrap:hover .pd-db-cap-bot{border-color:var(--cyan);}
+.pd-db-title{font-family:var(--font-display);font-size:13.5px;font-weight:700;color:var(--cyan);margin-bottom:4px;}
+.pd-db-sub{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);}
+
+/* Arrow */
+.pd-arrow{display:flex;flex-direction:column;align-items:center;height:32px;position:relative;}
+.pd-arrow::before{content:'';width:2px;height:20px;background:linear-gradient(180deg,var(--border-bright),var(--green-dim));border-radius:1px;}
+.pd-arrow::after{content:'▼';font-size:10px;color:var(--green);line-height:1;margin-top:-1px;}
+
+/* Risk output */
+.pd-risk-row{display:flex;gap:10px;justify-content:center;max-width:400px;width:100%;}
+.pd-risk-chip{padding:9px 0;border-radius:8px;font-family:var(--font-mono);font-size:12px;font-weight:700;border:1.5px solid;flex:1;text-align:center;}
+.pd-risk-chip.low{color:var(--green);border-color:var(--green);background:rgba(0,230,118,.08);}
+.pd-risk-chip.med{color:var(--amber);border-color:var(--amber);background:rgba(255,179,0,.08);}
+.pd-risk-chip.high{color:var(--red);border-color:var(--red);background:rgba(255,68,68,.08);}
+
 .feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
-.feature-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;
-  transition:all .2s;
-}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;transition:all .2s;}
 .feature-card:hover{border-color:var(--green-dim);transform:translateY(-1px);}
 .feature-card .fc-name{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;}
 .feature-card .fc-src{font-size:11px;color:var(--cyan-dim);margin-bottom:6px;}
 .feature-card .fc-desc{font-size:12px;color:var(--text-muted);margin:0;}
 
-/* FORMULA */
-.formula{
-  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
-  padding:16px 20px;margin:16px 0;font-family:var(--font-mono);font-size:13px;color:var(--cyan);
-  overflow-x:auto;
-}
+.formula{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin:16px 0;font-family:var(--font-mono);font-size:13px;color:var(--cyan);overflow-x:auto;}
 
-/* RISK BADGE */
 .risk-row{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
 .risk-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 
-/* SHAP BAR */
 .shap-chart{margin:20px 0;}
 .shap-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .shap-label{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);width:160px;text-align:right;flex-shrink:0;}
@@ -261,202 +180,197 @@ tr:hover td{background:var(--surface2);}
 .shap-bar{height:100%;border-radius:3px;transition:width .8s ease;}
 .shap-val{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);width:36px;}
 
-/* NAV BOTTOM */
 .doc-nav{display:flex;justify-content:space-between;margin-top:60px;padding-top:24px;border-top:1px solid var(--border);}
-.doc-nav a{
-  font-family:var(--font-mono);font-size:12px;color:var(--text-muted);text-decoration:none;
-  display:flex;align-items:center;gap:6px;padding:10px 16px;border:1px solid var(--border);border-radius:8px;
-  transition:all .2s;
-}
+.doc-nav a{font-family:var(--font-mono);font-size:12px;color:var(--text-muted);text-decoration:none;display:flex;align-items:center;gap:6px;padding:10px 16px;border:1px solid var(--border);border-radius:8px;transition:all .2s;}
 .doc-nav a:hover{border-color:var(--green);color:var(--green);}
 
-/* STATUS INDICATOR */
-.status-indicator{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:12px;color:var(--green);}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hl-green{color:var(--green);}.hl-cyan{color:var(--cyan);}.hl-amber{color:var(--amber);}.hl-red{color:var(--red);}
+::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-/* HIGHLIGHT */
-.hl-green{color:var(--green);}
-.hl-cyan{color:var(--cyan);}
-.hl-amber{color:var(--amber);}
-.hl-red{color:var(--red);}
-
-/* SCROLL */
-::-webkit-scrollbar{width:6px;height:6px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-::-webkit-scrollbar-thumb:hover{background:var(--border-bright);}
-
-/* MOBILE */
-@media(max-width:768px){
-  .sidebar{display:none}
-  .toc{display:none}
-  .main{margin-left:0}
-  .content{padding:24px 20px}
-  h1.doc-title{font-size:26px}
-  .feature-grid{grid-template-columns:1fr}
-  .metric-grid{grid-template-columns:repeat(2,1fr)}
-}
+@media(max-width:768px){.sidebar{display:none}.toc{display:none}.main{margin-left:0}.content{padding:24px 20px}h1.doc-title{font-size:26px}.feature-grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- TOP NAV -->
 <nav class="topnav">
-  <a class="topnav-brand" href="#" onclick="showPage('overview');return false;">
-    <div class="shield">🛡</div>
-    SentinelTI
-  </a>
-  <span class="version-tag"> v1.0 </span>
+  <a class="topnav-brand" href="#" onclick="showPage('overview');return false;"><div class="shield">🛡</div>SentinelTI</a>
+  <span class="version-tag">v2.0 || IEEE</span>
   <div class="topnav-links">
-    <a href="#" onclick="showPage('overview');return false;" class="active" id="nav-overview">Docs</a>
-    <a href="#" onclick="showPage('quickstart');return false;" id="nav-quickstart">Quickstart</a>
-    <a href="#" onclick="showPage('api');return false;" id="nav-api">API</a>
-    <a href="https://github.com/soham7998/sentinel_TI" target="_blank" class="btn-gh">GitHub ↗</a>
+    <div class="status-dot-wrap"><span class="status-dot"></span>live</div>
+    <a href="https://sentinelit.up.railway.app/" target="_blank">Dashboard ↗</a>
+    <a href="https://github.com/soham7998/sentinel_TI" target="_blank">GitHub ↗</a>
   </div>
 </nav>
 
 <div class="layout">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Getting Started</div>
-      <a class="sidebar-link active" href="#" onclick="goSection('overview','intro');return false;">Introduction</a>
-      <a class="sidebar-link" href="#" onclick="goSection('quickstart','qs-install');return false;">Installation</a>
-      <a class="sidebar-link" href="#" onclick="goSection('quickstart','qs-config');return false;">Configuration</a>
-      <a class="sidebar-link" href="#" onclick="goSection('quickstart','qs-run');return false;">Running SentinelTI</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Architecture</div>
-      <a class="sidebar-link" href="#" onclick="goSection('architecture','arch-ingestion');return false;">Ingestion Layer</a>
-      <a class="sidebar-link" href="#" onclick="goSection('architecture','arch-enrichment');return false;">Async Enrichment</a>
-      <a class="sidebar-link" href="#" onclick="goSection('architecture','arch-storage');return false;">MongoDB Store</a>
-      <a class="sidebar-link" href="#" onclick="goSection('architecture','arch-pipeline');return false;">Full Pipeline</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">ML Scoring</div>
-      <a class="sidebar-link" href="#" onclick="goSection('ml','ml-features');return false;">Feature Engineering</a>
-      <a class="sidebar-link" href="#" onclick="goSection('ml','ml-rf');return false;">Random Forest</a>
-      <a class="sidebar-link" href="#" onclick="goSection('ml','ml-xgb');return false;">XGBoost</a>
-      <a class="sidebar-link" href="#" onclick="goSection('ml','ml-stack');return false;">Stacking Ensemble</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Explainability</div>
-      <a class="sidebar-link" href="#" onclick="goSection('shap','shap-global');return false;">Global SHAP</a>
-      <a class="sidebar-link" href="#" onclick="goSection('shap','shap-local');return false;">Local SHAP</a>
-      <a class="sidebar-link" href="#" onclick="goSection('shap','shap-interp');return false;">Interpreting Results</a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Risk Scoring</div>
-      <a class="sidebar-link" href="#" onclick="goSection('risk','risk-levels');return false;">Risk Levels <span class="badge">3</span></a>
-      <a class="sidebar-link" href="#" onclick="goSection('risk','risk-metrics');return false;">Evaluation Metrics</a>
-      <a class="sidebar-link" href="#" onclick="goSection('risk','risk-results');return false;">Results <span class="badge new">new</span></a>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-section-title">Reference</div>
-      <a class="sidebar-link" href="#" onclick="goSection('api','api-endpoints');return false;">API Reference</a>
-      <a class="sidebar-link" href="#" onclick="goSection('api','api-feeds');return false;">Threat Feeds</a>
-      <a class="sidebar-link" href="#" onclick="goSection('api','api-schema');return false;">Data Schema</a>
-    </div>
-  </aside>
+<aside class="sidebar">
 
-  <!-- MAIN -->
-  <main class="main">
-    <div class="content">
+  <div class="nav-page active" id="nav-overview" onclick="showPage('overview')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">Introduction</span><span class="nav-page-desc">Overview &amp; tech stack</span></div>
+    <span class="nav-page-arrow">›</span>
+  </div>
+  <div class="nav-sub open" id="sub-overview">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('intro');return false;">What is SentinelTI?</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('intro');return false;">Problems Solved</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('intro');return false;">Tech Stack</a>
+  </div>
 
-      <!-- ═══ OVERVIEW PAGE ═══ -->
-      <div class="page active" id="page-overview">
+  <div class="nav-page" id="nav-quickstart" onclick="showPage('quickstart')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">Getting Started</span><span class="nav-page-desc">Install &amp; configure</span></div>
+    <span class="nav-page-arrow">›</span>
+  </div>
+  <div class="nav-sub" id="sub-quickstart">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('qs-install');return false;">Installation</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('qs-config');return false;">Configuration</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('qs-run');return false;">Running SentinelTI</a>
+  </div>
 
-        <div class="doc-hero" id="intro">
-          <div class="breadcrumb">SentinelTI / <span>Introduction</span></div>
-          <h1 class="doc-title">SentinelTI Dashboard</h1>
-          <p class="doc-subtitle lead">An explainable, real-time IP threat intelligence framework built for modern Security Operations Centers — powered by ensemble ML and SHAP interpretability.</p>
-          <br/>
-          <div class="status-indicator"><span class="status-dot"></span> System operational · v1.0 · IEEE Publication</div>
-        </div>
+  <div class="nav-divider"></div>
 
-        <div class="metric-grid">
-          <div class="metric-card"><div class="metric-val">95%</div><div class="metric-label">Precision</div><div class="metric-target">Target &gt;90%</div></div>
-          <div class="metric-card"><div class="metric-val">93%</div><div class="metric-label">Recall</div><div class="metric-target">Target &gt;85%</div></div>
-          <div class="metric-card"><div class="metric-val">94%</div><div class="metric-label">F1-Score</div><div class="metric-target">Target &gt;90%</div></div>
-          <div class="metric-card"><div class="metric-val">4%</div><div class="metric-label">False Positive Rate</div><div class="metric-target">Target &lt;5%</div></div>
-          <div class="metric-card"><div class="metric-val">&lt;10s</div><div class="metric-label">Data Freshness</div><div class="metric-target">Target &lt;15s</div></div>
-          <div class="metric-card"><div class="metric-val">&gt;95%</div><div class="metric-label">IOC Coverage</div><div class="metric-target">Target &gt;90%</div></div>
-        </div>
+  <div class="nav-page" id="nav-architecture" onclick="showPage('architecture')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">Architecture</span><span class="nav-page-desc">Async pipeline design</span></div>
+    <span class="nav-page-arrow">›</span>
+  </div>
+  <div class="nav-sub" id="sub-architecture">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('arch-diagram');return false;">Framework Diagram</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('arch-enrichment');return false;">Async Enrichment</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('arch-ipinfo');return false;">IPInfo Integration</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('arch-storage');return false;">MongoDB Schema</a>
+  </div>
 
-        <h2 class="section-title">What is SentinelTI?</h2>
-        <p>SentinelTI is an asynchronous threat intelligence platform that addresses three core failure modes of traditional blacklist-based systems: <strong>high false-positive rates</strong>, <strong>opaque decision-making</strong>, and <strong>delayed threat visibility</strong>.</p>
-        <p>The framework ingests IP indicators from open-source feeds in real time, enriches them asynchronously with contextual data, and runs a stacking ensemble of <strong>Random Forest + XGBoost</strong> to produce a dynamic maliciousness risk score. Every score is fully explained using <strong>SHAP</strong> (SHapley Additive exPlanations), giving SOC analysts transparent, evidence-based reasoning.</p>
+  <div class="nav-page" id="nav-ml" onclick="showPage('ml')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">ML Scoring</span><span class="nav-page-desc">RF + XGBoost ensemble</span></div>
+    <span class="nav-page-arrow">›</span>
+  </div>
+  <div class="nav-sub" id="sub-ml">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('ml-features');return false;">Feature Engineering</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('ml-rf');return false;">Random Forest</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('ml-xgb');return false;">XGBoost</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('ml-stack');return false;">Stacking Ensemble</a>
+  </div>
 
+  <div class="nav-page" id="nav-shap" onclick="showPage('shap')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">Explainability</span><span class="nav-page-desc">SHAP global &amp; local</span></div>
+    <span class="nav-page-arrow">›</span>
+  </div>
+  <div class="nav-sub" id="sub-shap">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('shap-global');return false;">Global SHAP</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('shap-local');return false;">Local Per-IP</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('shap-interp');return false;">Interpreting Results</a>
+  </div>
 
-        <h2 class="section-title">Core Problems Solved</h2>
-        <table>
-          <thead><tr><th>Traditional Problem</th><th>SentinelTI Solution</th></tr></thead>
-          <tbody>
-            <tr><td>Stale blacklists — hours of detection lag</td><td>Real-time ingestion, &lt;10s freshness</td></tr>
-            <tr><td>High false positive rate, alert fatigue</td><td>Ensemble ML reduces FPR to 4%</td></tr>
-            <tr><td>Black-box decisions, no analyst trust</td><td>SHAP global + local explainability</td></tr>
-            <tr><td>No risk granularity (binary flag)</td><td>Three-tier risk stratification: Low / Medium / High</td></tr>
-            <tr><td>Reactive SOC posture</td><td>Asynchronous enrichment enables proactive response</td></tr>
-          </tbody>
-        </table>
+  <div class="nav-divider"></div>
 
-        <h2 class="section-title">Tech Stack</h2>
-        <table>
-          <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr></thead>
-          <tbody>
-            <tr><td>Backend</td><td><code>Python</code></td><td>Core ingestion, enrichment, ML pipeline</td></tr>
-            <tr><td>Database</td><td><code>MongoDB</code></td><td>IOC storage with timestamps, features, scores</td></tr>
-            <tr><td>ML Models</td><td><code>Random Forest · XGBoost</code></td><td>Stacking ensemble for maliciousness scoring</td></tr>
-            <tr><td>Explainability</td><td><code>SHAP</code></td><td>Global &amp; local feature attribution</td></tr>
-            <tr><td>Dashboard</td><td><code>Streamlit</code></td><td>Live SOC visualisation with colour-coded risk</td></tr>
-            <tr><td>Deployment</td><td><code>Docker</code></td><td>Containerised, modular production deployment</td></tr>
-            <tr><td>Threat Feeds</td><td><code>Abuse.ch · CINS Army</code></td><td>Primary IOC sources</td></tr>
-            <tr><td>Enrichment APIs</td><td><code>VirusTotal · AbuseIPDB · GeoIP · ASN</code></td><td>Contextual metadata enrichment</td></tr>
-          </tbody>
-        </table>
+  <div class="nav-page" id="nav-risk" onclick="showPage('risk')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">Risk Scoring</span><span class="nav-page-desc">Levels &amp; metrics</span></div>
+    <span class="nav-badge green">3</span>
+  </div>
+  <div class="nav-sub" id="sub-risk">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('risk-levels');return false;">Risk Levels</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('risk-metrics');return false;">Eval Metrics</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('risk-results');return false;">Benchmark Results</a>
+  </div>
 
-        <div class="doc-nav">
-          <span></span>
-          <a href="#" onclick="goSection('quickstart','qs-install');return false;">Installation →</a>
-        </div>
-      </div>
+  <div class="nav-page" id="nav-api" onclick="showPage('api')">
+    <div class="nav-page-icon"></div>
+    <div class="nav-page-text"><span class="nav-page-label">API Reference</span><span class="nav-page-desc">Endpoints &amp; schema</span></div>
+    <span class="nav-badge amber">ref</span>
+  </div>
+  <div class="nav-sub" id="sub-api">
+    <a class="nav-sub-link" href="#" onclick="scrollTo('api-endpoints');return false;">Endpoints</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('api-feeds');return false;">Threat Feeds</a>
+    <a class="nav-sub-link" href="#" onclick="scrollTo('api-schema');return false;">Data Schema</a>
+  </div>
 
-      <!-- ═══ QUICKSTART PAGE ═══ -->
-      <div class="page" id="page-quickstart">
+  <div class="sidebar-footer">
+    <a href="https://github.com/soham7998/sentinel_TI" target="_blank">⬡ &nbsp;GitHub Repository</a>
+    <a href="https://sentinelit.up.railway.app/" target="_blank"> &nbsp;Live Dashboard</a>
+  </div>
+</aside>
 
-        <div class="doc-hero" id="qs-install">
-          <div class="breadcrumb">SentinelTI / <span>Quickstart</span></div>
-          <h1 class="doc-title">Getting Started</h1>
-          <p class="doc-subtitle">Get SentinelTI running in your SOC environment in under 10 minutes.</p>
-        </div>
+<main class="main">
+<div class="content">
 
-        <div class="callout info">
-          <div class="callout-title">ℹ Prerequisites</div>
-          <p>You need <code>Python 3.10+</code>, <code>Docker</code>, a running <code>MongoDB</code> instance, and API keys for <strong>VirusTotal</strong> and <strong>AbuseIPDB</strong>.</p>
-        </div>
+<!-- ══════ OVERVIEW ══════ -->
+<div class="page active" id="page-overview">
+  <div class="doc-hero" id="intro">
+    <div class="breadcrumb">SentinelTI / <span>Introduction</span></div>
+    <h1 class="doc-title">SentinelTI Dashboard</h1>
+    <p class="doc-subtitle lead">An explainable, real-time IP threat intelligence framework built for modern SOCs — powered by ensemble ML, IPInfo location enrichment, and SHAP interpretability.</p>
+    <br/><div class="status-dot-wrap"><span class="status-dot"></span>&nbsp;System operational · v1.0 · IEEE Publication</div>
+  </div>
+  <div class="metric-grid">
+    <div class="metric-card"><div class="metric-val">95%</div><div class="metric-label">Precision</div><div class="metric-target">Target &gt;90%</div></div>
+    <div class="metric-card"><div class="metric-val">93%</div><div class="metric-label">Recall</div><div class="metric-target">Target &gt;85%</div></div>
+    <div class="metric-card"><div class="metric-val">94%</div><div class="metric-label">F1-Score</div><div class="metric-target">Target &gt;90%</div></div>
+    <div class="metric-card"><div class="metric-val">4%</div><div class="metric-label">False Positive Rate</div><div class="metric-target">Target &lt;5%</div></div>
+    <div class="metric-card"><div class="metric-val">&lt;10s</div><div class="metric-label">Data Freshness</div><div class="metric-target">Target &lt;15s</div></div>
+    <div class="metric-card"><div class="metric-val">&gt;95%</div><div class="metric-label">IOC Coverage</div><div class="metric-target">Target &gt;90%</div></div>
+  </div>
+  <h2 class="section-title">What is SentinelTI?</h2>
+  <p>SentinelTI is an asynchronous threat intelligence platform that addresses three core failure modes of traditional blacklist-based systems: <strong>high false-positive rates</strong>, <strong>opaque decision-making</strong>, and <strong>delayed threat visibility</strong>.</p>
+  <p>The framework ingests IP indicators from open-source feeds in real time, enriches them asynchronously — including IP location and ASN context via <strong>IPInfo</strong> — and runs a stacking ensemble of <strong>Random Forest + XGBoost</strong> to produce a dynamic maliciousness risk score explained by <strong>SHAP</strong>.</p>
+  <div class="callout"><div class="callout-title">Research Paper</div><p><em>"An Explainable Machine Learning Framework for IP Threat Intelligence and Maliciousness Risk Scoring"</em> — Soham Shah &amp; Mousmi Pawar, Somaiya Vidyavihar University. IEEE Publication.</p></div>
+  <h2 class="section-title">Core Problems Solved</h2>
+  <table>
+    <thead><tr><th>Traditional Problem</th><th>SentinelTI Solution</th></tr></thead>
+    <tbody>
+      <tr><td>Stale blacklists — hours of detection lag</td><td>Real-time ingestion, &lt;10s freshness</td></tr>
+      <tr><td>High false positive rate, alert fatigue</td><td>Ensemble ML reduces FPR to 4%</td></tr>
+      <tr><td>Black-box decisions, no analyst trust</td><td>SHAP global + local explainability</td></tr>
+      <tr><td>No risk granularity (binary flag)</td><td>Three-tier stratification: Low / Medium / High</td></tr>
+      <tr><td>Reactive SOC posture</td><td>Async enrichment enables proactive response</td></tr>
+    </tbody>
+  </table>
+  <h2 class="section-title">Tech Stack</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Backend</td><td><code>Python</code></td><td>Core ingestion, enrichment, ML pipeline</td></tr>
+      <tr><td>Database</td><td><code>MongoDB</code></td><td>IOC storage with timestamps, features, scores</td></tr>
+      <tr><td>ML Models</td><td><code>Random Forest · XGBoost</code></td><td>Stacking ensemble for maliciousness scoring</td></tr>
+      <tr><td>Explainability</td><td><code>SHAP</code></td><td>Global &amp; local feature attribution</td></tr>
+      <tr><td>Dashboard</td><td><code>Streamlit</code></td><td>Live SOC visualisation with colour-coded risk</td></tr>
+      <tr><td>Deployment</td><td><code>Docker</code></td><td>Containerised, modular production deployment</td></tr>
+      <tr><td>Threat Feeds</td><td><code>Abuse.ch · CINS Army</code></td><td>Primary IOC sources</td></tr>
+      <tr><td>Enrichment APIs</td><td><code>VirusTotal · AbuseIPDB · IPInfo · ASN</code></td><td>Contextual metadata &amp; IP location enrichment</td></tr>
+    </tbody>
+  </table>
+  <div class="doc-nav"><span></span><a href="#" onclick="goSection('quickstart','qs-install');return false;">Installation →</a></div>
+</div>
 
-        <h2 class="section-title">Installation</h2>
-        <p>Clone the repository and install dependencies:</p>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-green"># Clone the repository</span>
+<!-- ══════ QUICKSTART ══════ -->
+<div class="page" id="page-quickstart">
+  <div class="doc-hero" id="qs-install">
+    <div class="breadcrumb">SentinelTI / <span>Quickstart</span></div>
+    <h1 class="doc-title">Getting Started</h1>
+    <p class="doc-subtitle">Get SentinelTI running in your SOC environment in under 10 minutes.</p>
+  </div>
+  <div class="callout info"><div class="callout-title">ℹ Prerequisites</div><p>You need <code>Python 3.10+</code>, <code>Docker</code>, a running <code>MongoDB</code> instance, and API keys for <strong>VirusTotal</strong>, <strong>AbuseIPDB</strong>, and <strong>IPInfo</strong>.</p></div>
+  <h2 class="section-title">Installation</h2>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green"># Clone the repository</span>
 git clone https://github.com/soham7998/sentinel_TI.git
 cd sentinel_TI
 
-<span class="hl-green"># Create a virtual environment</span>
+<span class="hl-green"># Create virtual environment</span>
 python -m venv .venv
 source .venv/bin/activate  <span class="hl-amber"># Windows: .venv\Scripts\activate</span>
 
 <span class="hl-green"># Install dependencies</span>
 pip install -r requirements.txt</pre>
-        </div>
-
-        <h3 class="sub-title" id="qs-config">Configuration</h3>
-        <p>Create a <code>.env</code> file at the project root with your credentials:</p>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">.env</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-amber"># MongoDB connection</span>
+  </div>
+  <h3 class="sub-title" id="qs-config">Configuration</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">.env</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-amber"># MongoDB connection</span>
 MONGO_URI=mongodb://localhost:27017
 MONGO_DB=sentinelti
 
@@ -464,666 +378,473 @@ MONGO_DB=sentinelti
 VIRUSTOTAL_API_KEY=your_virustotal_key_here
 ABUSEIPDB_API_KEY=your_abuseipdb_key_here
 
+<span class="hl-amber"># IP location enrichment (replaces GeoIP)</span>
+IPINFO_TOKEN=your_ipinfo_token_here
+
 <span class="hl-amber"># Feed configuration</span>
 ABUSEIP_LIMIT=200
 INGESTION_INTERVAL_SEC=300
 
 <span class="hl-amber"># Dashboard</span>
 STREAMLIT_PORT=8501</pre>
-        </div>
-
-        <h3 class="sub-title" id="qs-run">Running with Docker</h3>
-        <p>The recommended production deployment uses Docker Compose:</p>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-green"># Build and start all services</span>
+  </div>
+  <h3 class="sub-title" id="qs-run">Running with Docker</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green"># Build and start all services</span>
 docker-compose up --build -d
 
-<span class="hl-green"># View logs</span>
-docker-compose logs -f sentinel
+docker-compose logs -f sentinel   <span class="hl-amber"># view logs</span>
+open http://localhost:8501          <span class="hl-amber"># dashboard</span></pre>
+  </div>
+  <h3 class="sub-title">Running Locally</h3>
+  <div class="code-block">
+    <div class="code-tabs">
+      <div class="code-tab active" onclick="switchTab(this,'tab-l1')">Ingestion</div>
+      <div class="code-tab" onclick="switchTab(this,'tab-l2')">Enrichment</div>
+      <div class="code-tab" onclick="switchTab(this,'tab-l3')">Dashboard</div>
+    </div>
+    <div class="code-pane active" id="tab-l1"><pre><span class="hl-green"># Start IOC ingestion pipeline</span>
+python src/ingestion/ingest.py --limit 200</pre></div>
+    <div class="code-pane" id="tab-l2"><pre><span class="hl-green"># Run async enrichment worker (incl. IPInfo location lookup)</span>
+python src/enrichment/enrich_worker.py</pre></div>
+    <div class="code-pane" id="tab-l3"><pre><span class="hl-green"># Launch Streamlit dashboard</span>
+streamlit run dashboard/app.py --server.port 8501</pre></div>
+  </div>
+  <div class="callout"><div class="callout-title">Success</div><p>IOCs appear on the dashboard within ~30 seconds. Full SHAP scores with IPInfo location data arrive within ~60 seconds of ingestion.</p></div>
+  <div class="doc-nav"><a href="#" onclick="goSection('overview','intro');return false;">← Introduction</a><a href="#" onclick="goSection('architecture','arch-diagram');return false;">Architecture →</a></div>
+</div>
 
-<span class="hl-green"># Access the dashboard</span>
-open http://localhost:8501</pre>
-        </div>
+<!-- ══════ ARCHITECTURE ══════ -->
+<div class="page" id="page-architecture">
+  <div class="doc-hero" id="arch-diagram">
+    <div class="breadcrumb">SentinelTI / <span>Architecture</span></div>
+    <h1 class="doc-title">Architecture Pipeline</h1>
+    <p class="doc-subtitle">A modular, asynchronous pipeline separating fast IOC ingestion from background enrichment — achieving &lt;10s dashboard latency without sacrificing analytical depth.</p>
+  </div>
 
-        <h3 class="sub-title">Running Locally (without Docker)</h3>
-        <div class="code-block">
-          <div class="code-tabs">
-            <div class="code-tab active" onclick="switchTab(this,'tab-local1')">Ingestion</div>
-            <div class="code-tab" onclick="switchTab(this,'tab-local2')">Enrichment</div>
-            <div class="code-tab" onclick="switchTab(this,'tab-local3')">Dashboard</div>
-          </div>
-          <div class="code-pane active" id="tab-local1">
-            <pre><span class="hl-green"># Start the IOC ingestion pipeline</span>
-python src/ingestion/ingest.py --limit 200</pre>
-          </div>
-          <div class="code-pane" id="tab-local2">
-            <pre><span class="hl-green"># Run async enrichment worker</span>
-python src/enrichment/enrich_worker.py</pre>
-          </div>
-          <div class="code-pane" id="tab-local3">
-            <pre><span class="hl-green"># Launch Streamlit dashboard</span>
-streamlit run dashboard/app.py --server.port 8501</pre>
-          </div>
-        </div>
+  <h2 class="section-title">Framework Diagram</h2>
+  <p>The interactive diagram below matches the paper's Figure 1 — each stage flows sequentially through the asynchronous intelligence pipeline:</p>
 
-        <div class="callout">
-          <div class="callout-title"> Success</div>
-          <p>Once running, you should see IOCs populating in the dashboard within ~30 seconds. The enrichment pipeline runs asynchronously — full SHAP scores appear within ~60 seconds of ingestion.</p>
-        </div>
+  <!-- PIPELINE DIAGRAM -->
+  <div class="pipeline-diagram">
 
-        <h2 class="section-title">Project Structure</h2>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">tree</span></div>
-          <pre>{`
-┌─ External Threat Feeds ─────────────────┐
-│  Abuse.ch  │  CINS Army  │  Others      │
-└─────────────────┬───────────────────────┘
-                  │
-                  ▼
-┌─ Fast IOC Ingestion ───────────────────┐
-│  Normalize  │  Deduplicate  │  Validate │
-└─────────────────┬───────────────────────┘
-                  │
-                  ▼
-          ┌─ MongoDB ─┐  (Live to Dashboard)
-          │   IOCs    │
-          └─────┬─────┘
-                │
-         ┌──────▼──────┐
-         │   Async     │
-         │ Enrichment  │
-         │  Pipeline   │
-         └──────┬──────┘
-                │
-         ┌──────▼──────┐
-         │ ML Scoring  │
-         │  (Stacking) │
-         └──────┬──────┘
-                │
-         ┌──────▼──────┐
-         │ SHAP Explain│
-         │   (Local)   │
-         └──────┬──────┘
-                │
-              ▼ ▼ ▼
-      [LOW] [MED] [HIGH] ← SOC Dashboard
-            `}</pre>
-          <!-- <pre>sentinel_TI/
-├── <span class="hl-cyan">src/</span>
-│   ├── <span class="hl-cyan">ingestion/</span>        <span class="hl-amber"># IOC feed collectors</span>
-│   │   ├── ingest.py
-│   │   └── feeds/
-│   │       ├── abuseip.py
-│   │       └── cins.py
-│   ├── <span class="hl-cyan">enrichment/</span>       <span class="hl-amber"># Async enrichment workers</span>
-│   │   ├── enrich_worker.py
-│   │   ├── virustotal.py
-│   │   └── geoip.py
-│   ├── <span class="hl-cyan">ml/</span>               <span class="hl-amber"># Model training &amp; inference</span>
-│   │   ├── train.py
-│   │   ├── predict.py
-│   │   ├── rf_model.py
-│   │   ├── xgb_model.py
-│   │   └── stack_ensemble.py
-│   └── <span class="hl-cyan">shap_explain/</span>     <span class="hl-amber"># SHAP explainability layer</span>
-│       ├── global_shap.py
-│       └── local_shap.py
-├── <span class="hl-cyan">dashboard/</span>            <span class="hl-amber"># Streamlit SOC interface</span>
-│   ├── app.py
-│   └── components/
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-└── .env</pre> -->
-        </div>
-
-        <div class="doc-nav">
-          <a href="#" onclick="goSection('overview','intro');return false;">← Introduction</a>
-          <a href="#" onclick="goSection('architecture','arch-ingestion');return false;">Architecture →</a>
-        </div>
+    <div class="pd-node accent">
+      <div class="pd-node-badge">Input Layer</div>
+      <div class="pd-node-title">External Threat Feeds</div>
+      <div class="pd-node-sub">
+        <span class="hi-g">Abuse.ch</span> (Primary) &nbsp;·&nbsp; <span class="hi-g">CINS Army</span> (Supplementary)
       </div>
+    </div>
 
-      <!-- ═══ ARCHITECTURE PAGE ═══ -->
-      <div class="page" id="page-architecture">
+    <div class="pd-arrow"></div>
 
-        <div class="doc-hero" id="arch-ingestion">
-          <div class="breadcrumb">SentinelTI / <span>Architecture</span></div>
-          <h1 class="doc-title">Architecture Pipeline</h1>
-          <p class="doc-subtitle">A modular, asynchronous pipeline separating fast IOC ingestion from background enrichment — achieving &lt;10s dashboard latency without sacrificing analytical depth.</p>
-        </div>
+    <div class="pd-node">
+      <div class="pd-node-title"> Fast IOC Ingestion</div>
+      <div class="pd-node-sub">
+        Normalize &nbsp;·&nbsp; Deduplicate &nbsp;·&nbsp; Limit = <span class="hi">200</span>
+      </div>
+    </div>
 
-        <h2 class="section-title">Full Pipeline</h2>
-        <div class="pipeline" id="arch-pipeline">
-          <div class="pipeline-step">
-            <div class="step-body"><h4> External Threat Feeds</h4><p>Abuse.ch (primary) · CINS Army (supplementary) — real-time, public IP IOC streams</p></div>
-          </div>
-          <div class="pipeline-step">
-            <div class="step-body"><h4> Fast IOC Ingestion</h4><p>Normalize, deduplicate, validate. Limit: 200 IOCs per cycle. Stored to MongoDB immediately for zero-latency dashboard visibility.</p></div>
-          </div>
-          <div class="pipeline-step">
-            <div class="step-body"><h4> Async Enrichment</h4><p>VirusTotal (vendor detections) · AbuseIPDB (historical abuse + confidence) · GeoIP · ASN — runs in background, does not block ingestion</p></div>
-          </div>
-          <div class="pipeline-step">
-            <div class="step-body"><h4>  MongoDB IOC Store</h4><p>Stores timestamps, enrichment status, raw features, and computed scores. Provides both ingestion-time and enrichment-time snapshots.</p></div>
-          </div>
-          <div class="pipeline-step">
-            <div class="step-body"><h4> ML Risk Scoring Engine</h4><p>Random Forest + XGBoost stacking ensemble. Outputs a continuous risk score in [0, 1] per IP.</p></div>
-          </div>
-          <div class="pipeline-step">
-            <div class="step-body"><h4> SHAP Explainability</h4><p>Global feature importance + local per-IP SHAP values. Makes every risk score fully auditable.</p></div>
-          </div>
-          <div class="pipeline-step">
-            <div class="step-body"><h4> Actionable SOC Dashboard</h4><p>Three-tier risk display: LOW / MEDIUM / HIGH. Colour-coded, sortable, evidence-based decisions.</p></div>
-          </div>
-        </div>
+    <div class="pd-arrow"></div>
 
-        <h2 class="section-title" id="arch-enrichment">Async Enrichment Detail</h2>
-        <p>The key architectural decision in SentinelTI is the <strong>separation of ingestion from enrichment</strong>. When a new IOC arrives:</p>
-        <ol style="padding-left:20px;margin:16px 0;line-height:2;font-size:14px;color:var(--text)">
-          <li>It is immediately stored in MongoDB with a <code>enriched: false</code> flag and displayed on the SOC dashboard as a pending indicator.</li>
-          <li>A background worker picks it up and calls VirusTotal, AbuseIPDB, GeoIP, and ASN APIs asynchronously.</li>
-          <li>Once enrichment completes, the feature vector is built and passed through the ML pipeline.</li>
-          <li>The risk score and SHAP values are written back to MongoDB, updating the dashboard in real time.</li>
-        </ol>
+    <div class="pd-node">
+      <div class="pd-node-title">Asynchronous Enrichment</div>
+      <div class="pd-node-sub">
+        <span class="hi">VirusTotal</span> &nbsp;·&nbsp; <span class="hi">AbuseIPDB</span> &nbsp;·&nbsp; <span class="hi-g">IPInfo</span> &nbsp;·&nbsp; <span class="hi">ASN</span>
+      </div>
+    </div>
 
-        <div class="callout info">
-          <div class="callout-title"> Design Rationale</div>
-          <p>This two-phase approach ensures analysts see IOCs within seconds of ingestion (before enrichment), while full ML-scored records with SHAP explanations appear within ~60 seconds — far below the hours-long lag of traditional blacklist-based systems.</p>
-        </div>
+    <div class="pd-arrow"></div>
 
-        <h3 class="sub-title" id="arch-storage">MongoDB Schema</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">JSON · IOC Document</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre>{
+    <!-- DB Cylinder -->
+    <div class="pd-db-wrap">
+      <div class="pd-db-cap"></div>
+      <div class="pd-db-body">
+        <div class="pd-db-title">MongoDB IOC Store</div>
+        <div class="pd-db-sub">Timestamps &nbsp;·&nbsp; Features &nbsp;·&nbsp; Scores</div>
+      </div>
+      <div class="pd-db-cap-bot"></div>
+    </div>
+
+    <div class="pd-arrow"></div>
+
+    <div class="pd-node">
+      <div class="pd-node-title"> ML Risk Scoring Engine</div>
+      <div class="pd-node-sub">
+        Random Forest + XGBoost &nbsp;·&nbsp; Risk Score <span class="hi">0 → 1</span>
+      </div>
+    </div>
+
+    <div class="pd-arrow"></div>
+
+    <div class="pd-node">
+      <div class="pd-node-title"> SHAP Explainability</div>
+      <div class="pd-node-sub">
+        Global Feature Importance &nbsp;·&nbsp; Local Per-IP Explanation
+      </div>
+    </div>
+
+    <div class="pd-arrow"></div>
+
+    <div style="max-width:400px;width:100%;text-align:center;margin-bottom:8px;">
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-bottom:10px;"> Actionable SOC Dashboard — Evidence-based Decisions</div>
+    </div>
+    <div class="pd-risk-row">
+      <div class="pd-risk-chip low">LOW</div>
+      <div class="pd-risk-chip med">MEDIUM</div>
+      <div class="pd-risk-chip high">HIGH</div>
+    </div>
+
+  </div><!-- /pipeline-diagram -->
+
+  <h2 class="section-title" id="arch-enrichment">Async Enrichment Detail</h2>
+  <p>The core architectural decision is the <strong>separation of ingestion from enrichment</strong>. When a new IOC arrives:</p>
+  <ol style="padding-left:20px;margin:16px 0;line-height:2.2;font-size:14px;color:var(--text)">
+    <li>Stored immediately in MongoDB with <code>enriched: false</code> — visible on SOC dashboard instantly.</li>
+    <li>Background worker calls <strong>VirusTotal</strong>, <strong>AbuseIPDB</strong>, <strong>IPInfo</strong> (location/ASN/privacy), and ASN APIs asynchronously.</li>
+    <li>Once enrichment completes, the feature vector is assembled and scored by the ML pipeline.</li>
+    <li>Risk score and SHAP values are written back to MongoDB, updating the dashboard in real time.</li>
+  </ol>
+
+  <h3 class="sub-title" id="arch-ipinfo">IPInfo Integration</h3>
+  <div class="callout info"><div class="callout-title"> Why IPInfo?</div><p>IPInfo replaces static GeoIP databases with a live API that provides richer context: city/region/country, organization, ASN, and critically — <strong>privacy flags</strong> (VPN, proxy, Tor detection). These flags are strong threat indicators fed directly into the ML feature vector as <code>ipinfo_geo_risk</code>.</p></div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python · IPInfo enrichment</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green">import</span> ipinfo, os
+
+handler = ipinfo.getHandler(os.getenv(<span class="hl-amber">"IPINFO_TOKEN"</span>))
+
+<span class="hl-green">def</span> enrich_location(ip: str) -> dict:
+    d = handler.getDetails(ip)
+    <span class="hl-green">return</span> {
+        <span class="hl-amber">"country"</span>:   d.country,
+        <span class="hl-amber">"region"</span>:    d.region,
+        <span class="hl-amber">"city"</span>:      d.city,
+        <span class="hl-amber">"org"</span>:       d.org,        <span class="hl-amber"># e.g. "AS14061 DigitalOcean"</span>
+        <span class="hl-amber">"asn"</span>:       d.asn,
+        <span class="hl-amber">"privacy"</span>:   d.privacy,   <span class="hl-amber"># {"vpn":bool, "tor":bool, "proxy":bool}</span>
+        <span class="hl-amber">"latitude"</span>:  d.latitude,
+        <span class="hl-amber">"longitude"</span>: d.longitude,
+    }
+
+<span class="hl-green">def</span> compute_ipinfo_geo_risk(details: dict) -> float:
+    <span class="hl-amber">"""Derive a geo risk score from IPInfo privacy flags + ASN."""</span>
+    score = <span class="hl-cyan">0.0</span>
+    privacy = details.get(<span class="hl-amber">"privacy"</span>, {})
+    <span class="hl-green">if</span> privacy.get(<span class="hl-amber">"tor"</span>):    score += <span class="hl-cyan">0.5</span>
+    <span class="hl-green">if</span> privacy.get(<span class="hl-amber">"vpn"</span>):    score += <span class="hl-cyan">0.3</span>
+    <span class="hl-green">if</span> privacy.get(<span class="hl-amber">"proxy"</span>):  score += <span class="hl-cyan">0.2</span>
+    <span class="hl-green">return</span> min(score, <span class="hl-cyan">1.0</span>)</pre>
+  </div>
+
+  <h3 class="sub-title" id="arch-storage">MongoDB Schema</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">JSON · IOC Document</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre>{
   <span class="hl-cyan">"ip"</span>: <span class="hl-green">"137.184.9.29"</span>,
   <span class="hl-cyan">"source"</span>: <span class="hl-green">"Abuse.ch"</span>,
   <span class="hl-cyan">"first_seen"</span>: <span class="hl-green">"2026-02-14T08:10:21Z"</span>,
-  <span class="hl-cyan">"last_seen"</span>: <span class="hl-green">"2026-02-14T08:10:21Z"</span>,
-  <span class="hl-cyan">"raw_report_count"</span>: 42,
-  <span class="hl-cyan">"country"</span>: <span class="hl-green">"United States"</span>,
   <span class="hl-cyan">"enriched"</span>: <span class="hl-amber">true</span>,
+  <span class="hl-cyan">"location"</span>: {
+    <span class="hl-amber">/* via IPInfo */</span>
+    <span class="hl-cyan">"country"</span>: <span class="hl-green">"United States"</span>,  <span class="hl-cyan">"region"</span>: <span class="hl-green">"California"</span>,
+    <span class="hl-cyan">"city"</span>: <span class="hl-green">"Santa Clara"</span>,      <span class="hl-cyan">"org"</span>: <span class="hl-green">"AS14061 DigitalOcean"</span>,
+    <span class="hl-cyan">"asn"</span>: <span class="hl-green">"AS14061"</span>,
+    <span class="hl-cyan">"privacy"</span>: { <span class="hl-cyan">"vpn"</span>: <span class="hl-amber">false</span>, <span class="hl-cyan">"tor"</span>: <span class="hl-amber">false</span>, <span class="hl-cyan">"proxy"</span>: <span class="hl-amber">false</span> }
+  },
   <span class="hl-cyan">"features"</span>: {
-    <span class="hl-cyan">"abuse_reports"</span>: 42,
-    <span class="hl-cyan">"recency_hrs"</span>: 3,
-    <span class="hl-cyan">"confidence_pct"</span>: 92,
-    <span class="hl-cyan">"multi_source"</span>: <span class="hl-amber">true</span>,
+    <span class="hl-cyan">"abuse_reports"</span>: 42,    <span class="hl-cyan">"recency_hrs"</span>: 3,
+    <span class="hl-cyan">"confidence_pct"</span>: 92,   <span class="hl-cyan">"multi_source"</span>: <span class="hl-amber">true</span>,
     <span class="hl-cyan">"attack_types"</span>: [<span class="hl-green">"Brute Force"</span>, <span class="hl-green">"SSH"</span>],
     <span class="hl-cyan">"virustotal_detections"</span>: 18,
+    <span class="hl-cyan">"ipinfo_geo_risk"</span>: <span class="hl-cyan">0.0</span>,  <span class="hl-amber">/* derived from IPInfo privacy flags */</span>
     <span class="hl-cyan">"freshness"</span>: 0.91
   },
-  <span class="hl-cyan">"risk_score"</span>: 0.87,
-  <span class="hl-cyan">"risk_level"</span>: <span class="hl-red">"HIGH"</span>,
-  <span class="hl-cyan">"shap_values"</span>: { <span class="hl-amber">/* per-feature contributions */</span> }
+  <span class="hl-cyan">"risk_score"</span>: 0.87,  <span class="hl-cyan">"risk_level"</span>: <span class="hl-red">"HIGH"</span>,
+  <span class="hl-cyan">"shap_values"</span>: { <span class="hl-amber">/* per-feature SHAP φ */</span> }
 }</pre>
-        </div>
+  </div>
+  <div class="doc-nav"><a href="#" onclick="goSection('quickstart','qs-run');return false;">← Quickstart</a><a href="#" onclick="goSection('ml','ml-features');return false;">ML Scoring →</a></div>
+</div>
 
-        <div class="doc-nav">
-          <a href="#" onclick="goSection('quickstart','qs-run');return false;">← Quickstart</a>
-          <a href="#" onclick="goSection('ml','ml-features');return false;">ML Scoring →</a>
-        </div>
-      </div>
-
-      <!-- ═══ ML PAGE ═══ -->
-      <div class="page" id="page-ml">
-
-        <div class="doc-hero" id="ml-features">
-          <div class="breadcrumb">SentinelTI / <span>ML Scoring</span></div>
-          <h1 class="doc-title">Machine Learning Scoring</h1>
-          <p class="doc-subtitle">A stacking ensemble of Random Forest and XGBoost, combined via a linear meta-learner to produce calibrated maliciousness probabilities.</p>
-        </div>
-
-        <h2 class="section-title">Feature Engineering</h2>
-        <p>Each IP address is represented as a feature vector <code>xᵢ = (f₁, f₂, … f_d)</code> built from enrichment data:</p>
-        <div class="feature-grid">
-          <div class="feature-card"><div class="fc-name">Abuse Reports</div><div class="fc-src">📍 AbuseIPDB</div><div class="fc-desc">Frequency of abuse reports logged against this IP</div></div>
-          <div class="feature-card"><div class="fc-name">Confidence Score</div><div class="fc-src">📍 AbuseIPDB</div><div class="fc-desc">Weighted confidence (0–100) of maliciousness</div></div>
-          <div class="feature-card"><div class="fc-name">Recency (hours)</div><div class="fc-src">📍 Last Report Timestamp</div><div class="fc-desc">Hours elapsed since last observed abuse activity</div></div>
-          <div class="feature-card"><div class="fc-name">VirusTotal Detections</div><div class="fc-src">📍 VirusTotal API</div><div class="fc-desc">Count of vendor detections (e.g., 18/70)</div></div>
-          <div class="feature-card"><div class="fc-name">Geo-IP Risk</div><div class="fc-src">📍 GeoIP Database</div><div class="fc-desc">Risk score derived from geographic location</div></div>
-          <div class="feature-card"><div class="fc-name">Multi-Source Agreement</div><div class="fc-src">📍 Feed Consensus</div><div class="fc-desc">Number of independent feeds reporting this IP</div></div>
-          <div class="feature-card"><div class="fc-name">Attack Type Diversity</div><div class="fc-src">📍 AbuseIPDB Categories</div><div class="fc-desc">Count of distinct attack categories observed</div></div>
-          <div class="feature-card"><div class="fc-name">Freshness Feature</div><div class="fc-src">📍 Temporal Weighting</div><div class="fc-desc">Recent threats weighted higher than stale reports</div></div>
-        </div>
-
-        <p>The target variable is binary: <code>yᵢ ∈ {0, 1}</code>, where <code>1 = malicious</code>, <code>0 = benign</code>.</p>
-
-        <h2 class="section-title" id="ml-rf">Random Forest</h2>
-        <p>RF constructs K decision trees via bootstrap aggregation and random feature sampling. The ensemble malicious probability is:</p>
-        <div class="formula">P_RF(y=1 | xᵢ) = (1/K) · Σ hₖ(xᵢ)   for k = 1..K</div>
-        <p>Classification is applied at threshold τ: if the probability exceeds τ, the IP is flagged malicious.</p>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-green">from</span> sklearn.ensemble <span class="hl-green">import</span> RandomForestClassifier
-
-rf = RandomForestClassifier(
-    n_estimators=<span class="hl-cyan">200</span>,
-    max_depth=<span class="hl-cyan">15</span>,
-    min_samples_split=<span class="hl-cyan">5</span>,
-    class_weight=<span class="hl-amber">'balanced'</span>,
-    random_state=<span class="hl-cyan">42</span>
-)
+<!-- ══════ ML ══════ -->
+<div class="page" id="page-ml">
+  <div class="doc-hero" id="ml-features">
+    <div class="breadcrumb">SentinelTI / <span>ML Scoring</span></div>
+    <h1 class="doc-title">Machine Learning Scoring</h1>
+    <p class="doc-subtitle">A stacking ensemble of Random Forest and XGBoost, combined via a linear meta-learner to produce calibrated maliciousness probabilities.</p>
+  </div>
+  <h2 class="section-title">Feature Engineering</h2>
+  <p>Each IP address is represented as a feature vector <code>xᵢ = (f₁, f₂, … f_d)</code> built from enrichment data:</p>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="fc-name">Abuse Reports</div><div class="fc-src">📍 AbuseIPDB</div><div class="fc-desc">Frequency of abuse reports logged against this IP</div></div>
+    <div class="feature-card"><div class="fc-name">Confidence Score</div><div class="fc-src">📍 AbuseIPDB</div><div class="fc-desc">Weighted confidence (0–100) of maliciousness</div></div>
+    <div class="feature-card"><div class="fc-name">Recency (hours)</div><div class="fc-src">📍 Last Report Timestamp</div><div class="fc-desc">Hours elapsed since last observed abuse activity</div></div>
+    <div class="feature-card"><div class="fc-name">VirusTotal Detections</div><div class="fc-src">📍 VirusTotal API</div><div class="fc-desc">Count of vendor detections (e.g., 18/70)</div></div>
+    <div class="feature-card"><div class="fc-name">IPInfo Geo Risk</div><div class="fc-src">📍 IPInfo API</div><div class="fc-desc">Risk score derived from location, org, and privacy flags (VPN/Tor/proxy) via IPInfo</div></div>
+    <div class="feature-card"><div class="fc-name">Multi-Source Agreement</div><div class="fc-src">📍 Feed Consensus</div><div class="fc-desc">Number of independent feeds reporting this IP</div></div>
+    <div class="feature-card"><div class="fc-name">Attack Type Diversity</div><div class="fc-src">📍 AbuseIPDB Categories</div><div class="fc-desc">Count of distinct attack categories observed</div></div>
+    <div class="feature-card"><div class="fc-name">Freshness Feature</div><div class="fc-src">📍 Temporal Weighting</div><div class="fc-desc">Recent threats weighted higher than stale reports</div></div>
+  </div>
+  <p>The target variable is binary: <code>yᵢ ∈ {0, 1}</code>, where <code>1 = malicious</code>, <code>0 = benign</code>.</p>
+  <h2 class="section-title" id="ml-rf">Random Forest</h2>
+  <div class="formula">P_RF(y=1 | xᵢ) = (1/K) · Σ hₖ(xᵢ)   for k = 1..K</div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green">from</span> sklearn.ensemble <span class="hl-green">import</span> RandomForestClassifier
+rf = RandomForestClassifier(n_estimators=<span class="hl-cyan">200</span>, max_depth=<span class="hl-cyan">15</span>,
+    min_samples_split=<span class="hl-cyan">5</span>, class_weight=<span class="hl-amber">'balanced'</span>, random_state=<span class="hl-cyan">42</span>)
 rf.fit(X_train, y_train)
 rf_probs = rf.predict_proba(X_test)[:, <span class="hl-cyan">1</span>]</pre>
-        </div>
-
-        <h2 class="section-title" id="ml-xgb">XGBoost</h2>
-        <p>XGBoost builds an additive ensemble of M trees. The malicious probability uses the sigmoid function over the raw additive score:</p>
-        <div class="formula">P_XGB(y=1 | xᵢ) = sigmoid(Σ fₘ(xᵢ))   for m = 1..M</div>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-green">from</span> xgboost <span class="hl-green">import</span> XGBClassifier
-
-xgb = XGBClassifier(
-    n_estimators=<span class="hl-cyan">300</span>,
-    max_depth=<span class="hl-cyan">6</span>,
-    learning_rate=<span class="hl-cyan">0.05</span>,
-    scale_pos_weight=<span class="hl-cyan">3</span>,       <span class="hl-amber"># handle class imbalance</span>
-    use_label_encoder=<span class="hl-amber">False</span>,
-    eval_metric=<span class="hl-amber">'logloss'</span>
-)
+  </div>
+  <h2 class="section-title" id="ml-xgb">XGBoost</h2>
+  <div class="formula">P_XGB(y=1 | xᵢ) = sigmoid(Σ fₘ(xᵢ))   for m = 1..M</div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green">from</span> xgboost <span class="hl-green">import</span> XGBClassifier
+xgb = XGBClassifier(n_estimators=<span class="hl-cyan">300</span>, max_depth=<span class="hl-cyan">6</span>,
+    learning_rate=<span class="hl-cyan">0.05</span>, scale_pos_weight=<span class="hl-cyan">3</span>, eval_metric=<span class="hl-amber">'logloss'</span>)
 xgb.fit(X_train, y_train)
 xgb_probs = xgb.predict_proba(X_test)[:, <span class="hl-cyan">1</span>]</pre>
-        </div>
-
-        <h2 class="section-title" id="ml-stack">Stacking Ensemble</h2>
-        <p>The base learners' probability outputs are combined by a <strong>linear meta-learner</strong> (logistic regression) trained on a held-out validation fold:</p>
-        <div class="formula">ŷᵢ_stack = β₀ + β₁·P_RF(y=1|xᵢ) + β₂·P_XGB(y=1|xᵢ)</div>
-        <p>The final malicious probability is then:</p>
-        <div class="formula">P_final(y=1|xᵢ) = sigmoid(ŷᵢ_stack)</div>
-
-        <div class="callout">
-          <div class="callout-title"> Why a linear meta-learner?</div>
-          <p>The β₁ and β₂ coefficients are directly interpretable — they expose the relative trust placed in each base model. This keeps the entire stack explainable at every hierarchy level while still gaining the performance benefit of ensembling.</p>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-green">from</span> sklearn.linear_model <span class="hl-green">import</span> LogisticRegression
+  </div>
+  <h2 class="section-title" id="ml-stack">Stacking Ensemble</h2>
+  <div class="formula">ŷᵢ_stack = β₀ + β₁·P_RF(y=1|xᵢ) + β₂·P_XGB(y=1|xᵢ)</div>
+  <div class="formula">P_final(y=1|xᵢ) = sigmoid(ŷᵢ_stack)</div>
+  <div class="callout"><div class="callout-title"> Why a linear meta-learner?</div><p>The β₁ and β₂ coefficients directly expose the relative trust in each base model — maintaining full explainability at every hierarchy level.</p></div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green">from</span> sklearn.linear_model <span class="hl-green">import</span> LogisticRegression
 <span class="hl-green">import</span> numpy <span class="hl-green">as</span> np
-
-<span class="hl-amber"># Stack base predictions as meta-features</span>
 Z_train = np.column_stack([rf_val_probs, xgb_val_probs])
 Z_test  = np.column_stack([rf_probs, xgb_probs])
-
 meta = LogisticRegression()
 meta.fit(Z_train, y_val)
-
 final_scores = meta.predict_proba(Z_test)[:, <span class="hl-cyan">1</span>]
-<span class="hl-green">print</span>(<span class="hl-amber">f"RF weight: {meta.coef_[0][0]:.3f}, XGB weight: {meta.coef_[0][1]:.3f}"</span>)</pre>
-        </div>
+<span class="hl-green">print</span>(<span class="hl-amber">f"RF weight: {meta.coef_[0][0]:.3f}, XGB: {meta.coef_[0][1]:.3f}"</span>)</pre>
+  </div>
+  <div class="doc-nav"><a href="#" onclick="goSection('architecture','arch-diagram');return false;">← Architecture</a><a href="#" onclick="goSection('shap','shap-global');return false;">Explainability →</a></div>
+</div>
 
-        <div class="doc-nav">
-          <a href="#" onclick="goSection('architecture','arch-ingestion');return false;">← Architecture</a>
-          <a href="#" onclick="goSection('shap','shap-global');return false;">Explainability →</a>
-        </div>
-      </div>
-
-      <!-- ═══ SHAP PAGE ═══ -->
-      <div class="page" id="page-shap">
-
-        <div class="doc-hero" id="shap-global">
-          <div class="breadcrumb">SentinelTI / <span>Explainability</span></div>
-          <h1 class="doc-title">SHAP Explainability</h1>
-          <p class="doc-subtitle">SHAP (SHapley Additive exPlanations) provides both global model-wide importance and local per-IP attribution — making every risk score fully auditable by SOC analysts.</p>
-        </div>
-
-        <h2 class="section-title">Global Feature Importance</h2>
-        <p>Global SHAP aggregates feature contributions across all IP instances to reveal the dominant threat drivers:</p>
-        <div class="formula">Iⱼ = (1/n) · Σ |φᵢⱼ|   for i = 1..n</div>
-        <p>Visualised as a summary bar chart, ranked by mean absolute SHAP value:</p>
-
-        <div class="shap-chart" id="shap-local">
-          <div class="shap-row"><span class="shap-label">Confidence Score</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:82%;background:var(--green)"></div></div><span class="shap-val" style="color:var(--green)">0.82</span></div>
-          <div class="shap-row"><span class="shap-label">Abuse Reports</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:74%;background:var(--green)"></div></div><span class="shap-val" style="color:var(--green)">0.74</span></div>
-          <div class="shap-row"><span class="shap-label">VirusTotal Detections</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:61%;background:var(--cyan-dim)"></div></div><span class="shap-val" style="color:var(--cyan)">0.61</span></div>
-          <div class="shap-row"><span class="shap-label">Geo-IP Risk</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:44%;background:var(--cyan-dim)"></div></div><span class="shap-val" style="color:var(--cyan)">0.44</span></div>
-          <div class="shap-row"><span class="shap-label">Attack Types</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:38%;background:var(--amber)"></div></div><span class="shap-val" style="color:var(--amber)">0.38</span></div>
-          <div class="shap-row"><span class="shap-label">Multi-Source</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:30%;background:var(--amber)"></div></div><span class="shap-val" style="color:var(--amber)">0.30</span></div>
-          <div class="shap-row"><span class="shap-label">Freshness Feature</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:24%;background:var(--text-muted)"></div></div><span class="shap-val">0.24</span></div>
-          <div class="shap-row"><span class="shap-label">Recency (hrs)</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:18%;background:var(--text-muted)"></div></div><span class="shap-val">0.18</span></div>
-        </div>
-
-        <div class="callout info">
-          <div class="callout-title"> Key Insight</div>
-          <p>Confidence Score and Abuse Reports dominate, validating that the model correctly learns from the most behaviorally significant threat signals rather than spurious correlates.</p>
-        </div>
-
-        <h2 class="section-title">Local Per-IP Explanation</h2>
-        <p>For each IP, SHAP decomposes the final risk score into per-feature contributions:</p>
-        <div class="formula">P_final(y=1|xᵢ) = φ₀ + Σ φᵢⱼ   for j = 1..d</div>
-        <p>A positive φ value pushes the score toward malicious; a negative φ reduces it.</p>
-
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre><span class="hl-green">import</span> shap
-
-<span class="hl-amber"># Global explainer on stacking meta-learner</span>
+<!-- ══════ SHAP ══════ -->
+<div class="page" id="page-shap">
+  <div class="doc-hero" id="shap-global">
+    <div class="breadcrumb">SentinelTI / <span>Explainability</span></div>
+    <h1 class="doc-title">SHAP Explainability</h1>
+    <p class="doc-subtitle">Global model-wide importance and local per-IP attribution — making every risk score fully auditable by SOC analysts.</p>
+  </div>
+  <h2 class="section-title">Global Feature Importance</h2>
+  <div class="formula">Iⱼ = (1/n) · Σ |φᵢⱼ|   for i = 1..n</div>
+  <div class="shap-chart" id="shap-local">
+    <div class="shap-row"><span class="shap-label">Confidence Score</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:82%;background:var(--green)"></div></div><span class="shap-val" style="color:var(--green)">0.82</span></div>
+    <div class="shap-row"><span class="shap-label">Abuse Reports</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:74%;background:var(--green)"></div></div><span class="shap-val" style="color:var(--green)">0.74</span></div>
+    <div class="shap-row"><span class="shap-label">VirusTotal Detections</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:61%;background:var(--cyan-dim)"></div></div><span class="shap-val" style="color:var(--cyan)">0.61</span></div>
+    <div class="shap-row"><span class="shap-label">IPInfo Geo Risk</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:44%;background:var(--cyan-dim)"></div></div><span class="shap-val" style="color:var(--cyan)">0.44</span></div>
+    <div class="shap-row"><span class="shap-label">Attack Types</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:38%;background:var(--amber)"></div></div><span class="shap-val" style="color:var(--amber)">0.38</span></div>
+    <div class="shap-row"><span class="shap-label">Multi-Source</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:30%;background:var(--amber)"></div></div><span class="shap-val" style="color:var(--amber)">0.30</span></div>
+    <div class="shap-row"><span class="shap-label">Freshness Feature</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:24%;background:var(--text-muted)"></div></div><span class="shap-val">0.24</span></div>
+    <div class="shap-row"><span class="shap-label">Recency (hrs)</span><div class="shap-bar-wrap"><div class="shap-bar" style="width:18%;background:var(--text-muted)"></div></div><span class="shap-val">0.18</span></div>
+  </div>
+  <div class="callout info"><div class="callout-title">Key Insight</div><p>Confidence Score and Abuse Reports dominate. <strong>IPInfo Geo Risk</strong> ranks 4th — its privacy-flag signals (Tor, VPN, proxy) carry meaningful weight that static GeoIP lookups missed entirely.</p></div>
+  <h2 class="section-title">Local Per-IP Explanation</h2>
+  <div class="formula">P_final(y=1|xᵢ) = φ₀ + Σ φᵢⱼ   for j = 1..d</div>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="hl-green">import</span> shap
 explainer = shap.TreeExplainer(xgb_model)
 shap_values = explainer.shap_values(X_test)
-
-<span class="hl-amber"># Global summary plot</span>
 shap.summary_plot(shap_values, X_test, feature_names=feature_cols)
+shap.force_plot(explainer.expected_value, shap_values[<span class="hl-cyan">0</span>],
+    X_test.iloc[<span class="hl-cyan">0</span>], feature_names=feature_cols)</pre>
+  </div>
+  <h3 class="sub-title" id="shap-interp">Interpreting SHAP Output in the SOC</h3>
+  <table>
+    <thead><tr><th>SHAP φ Value</th><th>Interpretation</th><th>Analyst Action</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill green">φ &gt; 0.3</span></td><td>Feature strongly indicates malicious</td><td>Investigate this specific signal</td></tr>
+      <tr><td><span class="pill amber">0.0 &lt; φ ≤ 0.3</span></td><td>Feature weakly supports malicious</td><td>Note in context of other signals</td></tr>
+      <tr><td><span class="pill cyan">φ ≈ 0</span></td><td>Feature has negligible contribution</td><td>No action needed</td></tr>
+      <tr><td><span class="pill red">φ &lt; 0</span></td><td>Feature argues against maliciousness</td><td>Consider false positive likelihood</td></tr>
+    </tbody>
+  </table>
+  <div class="doc-nav"><a href="#" onclick="goSection('ml','ml-stack');return false;">← ML Scoring</a><a href="#" onclick="goSection('risk','risk-levels');return false;">Risk Scoring →</a></div>
+</div>
 
-<span class="hl-amber"># Local explanation for a single IP</span>
-ip_idx = <span class="hl-cyan">0</span>   <span class="hl-amber"># index into X_test</span>
-shap.force_plot(
-    explainer.expected_value,
-    shap_values[ip_idx],
-    X_test.iloc[ip_idx],
-    feature_names=feature_cols
-)</pre>
-        </div>
+<!-- ══════ RISK ══════ -->
+<div class="page" id="page-risk">
+  <div class="doc-hero" id="risk-levels">
+    <div class="breadcrumb">SentinelTI / <span>Risk Scoring</span></div>
+    <h1 class="doc-title">Risk Scoring &amp; Metrics</h1>
+    <p class="doc-subtitle">Three-tier stratification gives SOC analysts clear, actionable priority levels — eliminating the equal-urgency problem of binary blacklists.</p>
+  </div>
+  <h2 class="section-title">Risk Level Classification</h2>
+  <div class="risk-row"><div class="risk-dot" style="background:var(--green)"></div><strong style="color:var(--green);min-width:80px">LOW</strong><span style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;min-width:100px">Score: 0.0 – 0.3</span><span>Benign or stale reports. No action needed.</span></div>
+  <div class="risk-row"><div class="risk-dot" style="background:var(--amber)"></div><strong style="color:var(--amber);min-width:80px">MEDIUM</strong><span style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;min-width:100px">Score: 0.3 – 0.7</span><span>Suspicious or mixed signals. Review recommended.</span></div>
+  <div class="risk-row"><div class="risk-dot" style="background:var(--red)"></div><strong style="color:var(--red);min-width:80px">HIGH</strong><span style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;min-width:100px">Score: ≥ 0.7</span><span>Active threat. Immediate action required.</span></div>
+  <br/>
+  <div class="callout warn"><div class="callout-title">⚠ Threshold Tuning</div><p>Defaults (0.3, 0.7) calibrated for FPR &lt;5%. Adjust in <code>config/risk_thresholds.yaml</code> for your environment.</p></div>
+  <h2 class="section-title" id="risk-metrics">Evaluation Metrics</h2>
+  <table>
+    <thead><tr><th>Metric</th><th>Formula</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Precision</strong></td><td><code>TP / (TP + FP)</code></td><td>Reliability of malicious predictions</td></tr>
+      <tr><td><strong>Recall</strong></td><td><code>TP / (TP + FN)</code></td><td>Ability to detect all actual threats</td></tr>
+      <tr><td><strong>F1-Score</strong></td><td><code>2·(P·R)/(P+R)</code></td><td>Harmonic mean of precision and recall</td></tr>
+      <tr><td><strong>FPR</strong></td><td><code>FP / (FP + TN)</code></td><td>Benign IPs incorrectly flagged</td></tr>
+      <tr><td><strong>Score Stability</strong></td><td><code>σ(Rᵢ)</code></td><td>Std dev of risk scores across time windows</td></tr>
+      <tr><td><strong>Data Freshness</strong></td><td><code>mean(t_current − t_IOC)</code></td><td>Average IOC age at dashboard display time</td></tr>
+      <tr><td><strong>Feature Drift (KS)</strong></td><td><code>sup|F₁(x) − F₂(x)|</code></td><td>Distributional shift: training vs. deployment</td></tr>
+    </tbody>
+  </table>
+  <h2 class="section-title" id="risk-results">Benchmark Results</h2>
+  <div class="metric-grid">
+    <div class="metric-card"><div class="metric-val">95%</div><div class="metric-label">Precision</div><div class="metric-target">Target &gt;90% ✓</div></div>
+    <div class="metric-card"><div class="metric-val">93%</div><div class="metric-label">Recall</div><div class="metric-target">Target &gt;85% ✓</div></div>
+    <div class="metric-card"><div class="metric-val">94%</div><div class="metric-label">F1-Score</div><div class="metric-target">Target &gt;90% ✓</div></div>
+    <div class="metric-card"><div class="metric-val">4%</div><div class="metric-label">FPR</div><div class="metric-target">Target &lt;5% ✓</div></div>
+    <div class="metric-card"><div class="metric-val">&lt;10s</div><div class="metric-label">Freshness</div><div class="metric-target">Target &lt;15s ✓</div></div>
+    <div class="metric-card"><div class="metric-val">Stable</div><div class="metric-label">Feature Drift</div><div class="metric-target">KS &lt;0.1 ✓</div></div>
+  </div>
+  <h3 class="sub-title">Comparison with Prior Work</h3>
+  <table>
+    <thead><tr><th>System</th><th>Model</th><th>Precision</th><th>Real-time</th><th>Explainable</th></tr></thead>
+    <tbody>
+      <tr><td>AIRPA (Lewis et al.)</td><td>Random Forest</td><td>85%</td><td><span class="pill red">No</span></td><td><span class="pill red">No</span></td></tr>
+      <tr><td>Anjum &amp; Chowdhury</td><td>SVM, KNN</td><td>91%</td><td><span class="pill amber">Partial</span></td><td><span class="pill red">No</span></td></tr>
+      <tr><td>Palaniappan et al.</td><td>RF, SVM</td><td>89%</td><td><span class="pill red">No</span></td><td><span class="pill red">No</span></td></tr>
+      <tr><td><strong>SentinelTI</strong></td><td>RF + XGBoost Stack</td><td><strong>95%</strong></td><td><span class="pill green">Yes</span></td><td><span class="pill green">SHAP ✓</span></td></tr>
+    </tbody>
+  </table>
+  <div class="doc-nav"><a href="#" onclick="goSection('shap','shap-global');return false;">← Explainability</a><a href="#" onclick="goSection('api','api-endpoints');return false;">API Reference →</a></div>
+</div>
 
-        <h3 class="sub-title" id="shap-interp">Interpreting SHAP Output in the SOC</h3>
-        <table>
-          <thead><tr><th>SHAP φ Value</th><th>Interpretation</th><th>Analyst Action</th></tr></thead>
-          <tbody>
-            <tr><td><span class="pill green">φ &gt; 0.3</span></td><td>Feature strongly indicates malicious</td><td>Investigate this specific signal</td></tr>
-            <tr><td><span class="pill amber">0.0 &lt; φ ≤ 0.3</span></td><td>Feature weakly supports malicious</td><td>Note in context of other signals</td></tr>
-            <tr><td><span class="pill cyan">φ ≈ 0</span></td><td>Feature has negligible contribution</td><td>No action needed for this feature</td></tr>
-            <tr><td><span class="pill red">φ &lt; 0</span></td><td>Feature argues against maliciousness</td><td>Consider false positive likelihood</td></tr>
-          </tbody>
-        </table>
-
-        <div class="doc-nav">
-          <a href="#" onclick="goSection('ml','ml-stack');return false;">← ML Scoring</a>
-          <a href="#" onclick="goSection('risk','risk-levels');return false;">Risk Scoring →</a>
-        </div>
-      </div>
-
-      <!-- ═══ RISK PAGE ═══ -->
-      <div class="page" id="page-risk">
-
-        <div class="doc-hero" id="risk-levels">
-          <div class="breadcrumb">SentinelTI / <span>Risk Scoring</span></div>
-          <h1 class="doc-title">Risk Scoring &amp; Metrics</h1>
-          <p class="doc-subtitle">Three-tier stratification gives SOC analysts clear, actionable priority levels — eliminating the equal-urgency problem of binary blacklists.</p>
-        </div>
-
-        <h2 class="section-title">Risk Level Classification</h2>
-        <div class="risk-row"><div class="risk-dot" style="background:#00e676"></div><strong style="color:var(--green);min-width:80px">LOW</strong><span style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;min-width:100px">Score: 0.0 – 0.3</span><span>Benign or stale reports. No action needed.</span></div>
-        <div class="risk-row"><div class="risk-dot" style="background:var(--amber)"></div><strong style="color:var(--amber);min-width:80px">MEDIUM</strong><span style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;min-width:100px">Score: 0.3 – 0.7</span><span>Suspicious or mixed signals. Review recommended.</span></div>
-        <div class="risk-row"><div class="risk-dot" style="background:var(--red)"></div><strong style="color:var(--red);min-width:80px">HIGH</strong><span style="color:var(--text-muted);font-family:var(--font-mono);font-size:12px;min-width:100px">Score: ≥ 0.7</span><span>Active threat. Immediate action required.</span></div>
-
-        <br/>
-        <div class="callout warn">
-          <div class="callout-title">⚠ Threshold Tuning</div>
-          <p>The default thresholds (0.3, 0.7) are calibrated for the SOC target FPR of &lt;5%. Adjust in <code>config/risk_thresholds.yaml</code> if your environment has different sensitivity requirements.</p>
-        </div>
-
-        <h2 class="section-title" id="risk-metrics">Evaluation Metrics</h2>
-        <table>
-          <thead><tr><th>Metric</th><th>Formula</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Accuracy</strong></td><td><code>(TP + TN) / (TP + TN + FP + FN)</code></td><td>Overall classification correctness</td></tr>
-            <tr><td><strong>Precision</strong></td><td><code>TP / (TP + FP)</code></td><td>Reliability of malicious predictions</td></tr>
-            <tr><td><strong>Recall</strong></td><td><code>TP / (TP + FN)</code></td><td>Ability to detect all actual threats</td></tr>
-            <tr><td><strong>F1-Score</strong></td><td><code>2 · (P · R) / (P + R)</code></td><td>Harmonic mean of precision and recall</td></tr>
-            <tr><td><strong>FPR</strong></td><td><code>FP / (FP + TN)</code></td><td>Benign IPs incorrectly flagged</td></tr>
-            <tr><td><strong>Score Stability</strong></td><td><code>σ(Rᵢ)</code></td><td>Std dev of risk scores across time windows</td></tr>
-            <tr><td><strong>Data Freshness</strong></td><td><code>mean(t_current − t_IOC)</code></td><td>Average age of IOC at dashboard display time</td></tr>
-            <tr><td><strong>Feature Drift (KS)</strong></td><td><code>sup|F₁(x) − F₂(x)|</code></td><td>Distributional shift: training vs. deployment</td></tr>
-          </tbody>
-        </table>
-
-        <h2 class="section-title" id="risk-results">Benchmark Results</h2>
-        <div class="metric-grid">
-          <div class="metric-card"><div class="metric-val">95%</div><div class="metric-label">Precision</div><div class="metric-target">Target &gt;90% ✓</div></div>
-          <div class="metric-card"><div class="metric-val">93%</div><div class="metric-label">Recall</div><div class="metric-target">Target &gt;85% ✓</div></div>
-          <div class="metric-card"><div class="metric-val">94%</div><div class="metric-label">F1-Score</div><div class="metric-target">Target &gt;90% ✓</div></div>
-          <div class="metric-card"><div class="metric-val">4%</div><div class="metric-label">FPR</div><div class="metric-target">Target &lt;5% ✓</div></div>
-          <div class="metric-card"><div class="metric-val">&lt;10s</div><div class="metric-label">Freshness</div><div class="metric-target">Target &lt;15s ✓</div></div>
-          <div class="metric-card"><div class="metric-val">Stable</div><div class="metric-label">Feature Drift</div><div class="metric-target">KS &lt;0.1 ✓</div></div>
-        </div>
-
-        <h3 class="sub-title">Comparison with Prior Work</h3>
-        <table>
-          <thead><tr><th>System</th><th>Model</th><th>Accuracy / Precision</th><th>Real-time</th><th>Explainable</th></tr></thead>
-          <tbody>
-            <tr><td>AIRPA (Lewis et al.)</td><td>Random Forest</td><td>85% precision</td><td><span class="pill red">No</span></td><td><span class="pill red">No</span></td></tr>
-            <tr><td>Anjum &amp; Chowdhury</td><td>SVM, KNN</td><td>91% accuracy</td><td><span class="pill amber">Partial</span></td><td><span class="pill red">No</span></td></tr>
-            <tr><td>Palaniappan et al.</td><td>RF, SVM</td><td>89% accuracy</td><td><span class="pill red">No</span></td><td><span class="pill red">No</span></td></tr>
-            <tr><td><strong>SentinelTI</strong></td><td>RF + XGBoost Stack</td><td><strong>95% precision</strong></td><td><span class="pill green">Yes</span></td><td><span class="pill green">Yes (SHAP)</span></td></tr>
-          </tbody>
-        </table>
-
-        <div class="doc-nav">
-          <a href="#" onclick="goSection('shap','shap-global');return false;">← Explainability</a>
-          <a href="#" onclick="goSection('api','api-endpoints');return false;">API Reference →</a>
-        </div>
-      </div>
-
-      <!-- ═══ API PAGE ═══ -->
-      <div class="page" id="page-api">
-
-        <div class="doc-hero" id="api-endpoints">
-          <div class="breadcrumb">SentinelTI / <span>API Reference</span></div>
-          <h1 class="doc-title">API Reference</h1>
-          <p class="doc-subtitle">REST endpoints for programmatic access to SentinelTI's ingestion, scoring, and explanation pipeline.</p>
-        </div>
-
-        <div class="callout info">
-          <div class="callout-title">ℹ Base URL</div>
-          <p>All endpoints are relative to <code>http://localhost:8000/api/v1</code> (or your deployed host). Authentication is via Bearer token set in the <code>Authorization</code> header.</p>
-        </div>
-
-        <h2 class="section-title">Endpoints</h2>
-
-        <h3 class="sub-title">POST /score</h3>
-        <p>Submit one or more IP addresses for immediate scoring. Returns risk score, level, and SHAP attribution.</p>
-        <div class="code-block">
-          <div class="code-tabs">
-            <div class="code-tab active" onclick="switchTab(this,'tab-api1a')">Request</div>
-            <div class="code-tab" onclick="switchTab(this,'tab-api1b')">Response</div>
-            <div class="code-tab" onclick="switchTab(this,'tab-api1c')">Python</div>
-          </div>
-          <div class="code-pane active" id="tab-api1a">
-            <pre>POST /api/v1/score
+<!-- ══════ API ══════ -->
+<div class="page" id="page-api">
+  <div class="doc-hero" id="api-endpoints">
+    <div class="breadcrumb">SentinelTI / <span>API Reference</span></div>
+    <h1 class="doc-title">API Reference</h1>
+    <p class="doc-subtitle">REST endpoints for programmatic access to SentinelTI's ingestion, scoring, and explanation pipeline.</p>
+  </div>
+  <div class="callout info"><div class="callout-title">ℹ Base URL</div><p>All endpoints relative to <code>http://localhost:8000/api/v1</code>. Auth via <code>Authorization: Bearer &lt;token&gt;</code>.</p></div>
+  <h2 class="section-title">Endpoints</h2>
+  <h3 class="sub-title">POST /score</h3>
+  <div class="code-block">
+    <div class="code-tabs">
+      <div class="code-tab active" onclick="switchTab(this,'tab-a1')">Request</div>
+      <div class="code-tab" onclick="switchTab(this,'tab-a2')">Response</div>
+      <div class="code-tab" onclick="switchTab(this,'tab-a3')">Python</div>
+    </div>
+    <div class="code-pane active" id="tab-a1"><pre>POST /api/v1/score
 Authorization: Bearer &lt;token&gt;
 Content-Type: application/json
 
-{
-  <span class="hl-cyan">"ips"</span>: [<span class="hl-green">"137.184.9.29"</span>, <span class="hl-green">"45.33.32.156"</span>],
-  <span class="hl-cyan">"explain"</span>: <span class="hl-amber">true</span>
-}</pre>
-          </div>
-          <div class="code-pane" id="tab-api1b">
-            <pre>{
-  <span class="hl-cyan">"results"</span>: [
-    {
-      <span class="hl-cyan">"ip"</span>: <span class="hl-green">"137.184.9.29"</span>,
-      <span class="hl-cyan">"risk_score"</span>: <span class="hl-cyan">0.87</span>,
-      <span class="hl-cyan">"risk_level"</span>: <span class="hl-red">"HIGH"</span>,
-      <span class="hl-cyan">"shap"</span>: {
-        <span class="hl-cyan">"confidence_pct"</span>: <span class="hl-cyan">0.41</span>,
-        <span class="hl-cyan">"abuse_reports"</span>: <span class="hl-cyan">0.28</span>,
-        <span class="hl-cyan">"virustotal_detections"</span>: <span class="hl-cyan">0.19</span>
-      }
-    }
-  ]
-}</pre>
-          </div>
-          <div class="code-pane" id="tab-api1c">
-            <pre><span class="hl-green">import</span> requests
-
-resp = requests.post(
-    <span class="hl-amber">"http://localhost:8000/api/v1/score"</span>,
+{ <span class="hl-cyan">"ips"</span>: [<span class="hl-green">"137.184.9.29"</span>], <span class="hl-cyan">"explain"</span>: <span class="hl-amber">true</span> }</pre></div>
+    <div class="code-pane" id="tab-a2"><pre>{
+  <span class="hl-cyan">"results"</span>: [{
+    <span class="hl-cyan">"ip"</span>: <span class="hl-green">"137.184.9.29"</span>,
+    <span class="hl-cyan">"risk_score"</span>: <span class="hl-cyan">0.87</span>, <span class="hl-cyan">"risk_level"</span>: <span class="hl-red">"HIGH"</span>,
+    <span class="hl-cyan">"location"</span>: {
+      <span class="hl-cyan">"country"</span>: <span class="hl-green">"US"</span>, <span class="hl-cyan">"city"</span>: <span class="hl-green">"Santa Clara"</span>,
+      <span class="hl-cyan">"org"</span>: <span class="hl-green">"AS14061 DigitalOcean"</span>,
+      <span class="hl-cyan">"privacy"</span>: {<span class="hl-cyan">"tor"</span>:<span class="hl-amber">false</span>,<span class="hl-cyan">"vpn"</span>:<span class="hl-amber">false</span>}
+    },
+    <span class="hl-cyan">"shap"</span>: { <span class="hl-cyan">"confidence_pct"</span>:<span class="hl-cyan">0.41</span>, <span class="hl-cyan">"abuse_reports"</span>:<span class="hl-cyan">0.28</span>, <span class="hl-cyan">"ipinfo_geo_risk"</span>:<span class="hl-cyan">0.19</span> }
+  }]
+}</pre></div>
+    <div class="code-pane" id="tab-a3"><pre><span class="hl-green">import</span> requests
+resp = requests.post(<span class="hl-amber">"http://localhost:8000/api/v1/score"</span>,
     headers={<span class="hl-amber">"Authorization"</span>: <span class="hl-amber">"Bearer your_token"</span>},
-    json={<span class="hl-amber">"ips"</span>: [<span class="hl-amber">"137.184.9.29"</span>], <span class="hl-amber">"explain"</span>: <span class="hl-amber">True</span>}
-)
-data = resp.json()
-<span class="hl-green">print</span>(data[<span class="hl-amber">"results"</span>][<span class="hl-cyan">0</span>][<span class="hl-amber">"risk_level"</span>])</pre>
-          </div>
-        </div>
+    json={<span class="hl-amber">"ips"</span>: [<span class="hl-amber">"137.184.9.29"</span>], <span class="hl-amber">"explain"</span>: <span class="hl-amber">True</span>})
+<span class="hl-green">print</span>(resp.json()[<span class="hl-amber">"results"</span>][<span class="hl-cyan">0</span>][<span class="hl-amber">"risk_level"</span>])</pre></div>
+  </div>
 
-        <h3 class="sub-title">GET /ioc/{ip}</h3>
-        <p>Retrieve the full IOC record for a specific IP address, including enrichment data and historical scores.</p>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
-          <pre>curl -X GET http://localhost:8000/api/v1/ioc/137.184.9.29 \
+  <h3 class="sub-title">GET /ioc/{ip}</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+    <pre>curl http://localhost:8000/api/v1/ioc/137.184.9.29 \
   -H <span class="hl-amber">"Authorization: Bearer &lt;token&gt;"</span></pre>
-        </div>
+  </div>
 
-        <h3 class="sub-title">GET /feed/status</h3>
-        <p>Check the health and freshness of all active threat feeds.</p>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">JSON response</span></div>
-          <pre>{
-  <span class="hl-cyan">"feeds"</span>: {
-    <span class="hl-cyan">"abuse_ch"</span>: { <span class="hl-cyan">"status"</span>: <span class="hl-green">"healthy"</span>, <span class="hl-cyan">"last_sync"</span>: <span class="hl-green">"2026-04-06T08:12:00Z"</span> },
-    <span class="hl-cyan">"cins_army"</span>: { <span class="hl-cyan">"status"</span>: <span class="hl-green">"healthy"</span>, <span class="hl-cyan">"last_sync"</span>: <span class="hl-green">"2026-04-06T08:11:45Z"</span> }
-  },
-  <span class="hl-cyan">"total_iocs"</span>: <span class="hl-cyan">14382</span>,
-  <span class="hl-cyan">"enriched_pct"</span>: <span class="hl-cyan">96.4</span>
-}</pre>
-        </div>
+  <h2 class="section-title" id="api-feeds">Threat Feeds &amp; Enrichment Sources</h2>
+  <table>
+    <thead><tr><th>Source</th><th>Type</th><th>Update Freq</th><th>Data Provided</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://abuse.ch" target="_blank">Abuse.ch</a></td><td>Primary IOC feed</td><td>Every 5 min</td><td>Malicious IPs, C2, botnet</td></tr>
+      <tr><td><a href="http://cinsscore.com" target="_blank">CINS Army</a></td><td>Supplementary IOC</td><td>Hourly</td><td>Threat score list</td></tr>
+      <tr><td>AbuseIPDB</td><td>Enrichment API</td><td>Per-query</td><td>Abuse reports, confidence, categories</td></tr>
+      <tr><td>VirusTotal</td><td>Enrichment API</td><td>Per-query</td><td>Vendor detections count</td></tr>
+      <tr><td><a href="https://ipinfo.io" target="_blank">IPInfo</a></td><td>Location &amp; ASN enrichment</td><td>Per-query</td><td>Country, city, org, ASN, VPN/Tor/proxy flags</td></tr>
+    </tbody>
+  </table>
 
-        <h2 class="section-title" id="api-feeds">Threat Feeds</h2>
-        <table>
-          <thead><tr><th>Feed</th><th>Type</th><th>Update Frequency</th><th>Format</th></tr></thead>
-          <tbody>
-            <tr><td><a href="https://abuse.ch" target="_blank">Abuse.ch</a></td><td>Primary IOC</td><td>Every 5 minutes</td><td>CSV / JSON</td></tr>
-            <tr><td><a href="http://cinsscore.com" target="_blank">CINS Army</a></td><td>Supplementary IOC</td><td>Hourly</td><td>Plaintext list</td></tr>
-            <tr><td>AbuseIPDB</td><td>Enrichment API</td><td>Per-query</td><td>REST JSON</td></tr>
-            <tr><td>VirusTotal</td><td>Enrichment API</td><td>Per-query</td><td>REST JSON</td></tr>
-            <tr><td>MaxMind GeoIP2</td><td>Geographic enrichment</td><td>Weekly DB update</td><td>mmdb binary</td></tr>
-            <tr><td>ARIN / RIPE ASN</td><td>Network enrichment</td><td>Daily</td><td>REST JSON</td></tr>
-          </tbody>
-        </table>
+  <h2 class="section-title" id="api-schema">Data Schema Reference</h2>
+  <table>
+    <thead><tr><th>Field</th><th>Type</th><th>Source</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>ip</code></td><td>string</td><td>Feed</td><td>IPv4 address (canonical)</td></tr>
+      <tr><td><code>abuse_reports</code></td><td>int</td><td>AbuseIPDB</td><td>Total abuse report count</td></tr>
+      <tr><td><code>confidence_pct</code></td><td>float</td><td>AbuseIPDB</td><td>Weighted confidence 0–100</td></tr>
+      <tr><td><code>recency_hrs</code></td><td>float</td><td>Derived</td><td>Hours since last report</td></tr>
+      <tr><td><code>virustotal_detections</code></td><td>int</td><td>VirusTotal</td><td>Number of vendor detections</td></tr>
+      <tr><td><code>location.country</code></td><td>string</td><td><strong>IPInfo</strong></td><td>ISO country code</td></tr>
+      <tr><td><code>location.org</code></td><td>string</td><td><strong>IPInfo</strong></td><td>ASN + organisation name</td></tr>
+      <tr><td><code>location.privacy</code></td><td>object</td><td><strong>IPInfo</strong></td><td>VPN / proxy / Tor boolean flags</td></tr>
+      <tr><td><code>ipinfo_geo_risk</code></td><td>float</td><td>Derived / <strong>IPInfo</strong></td><td>Computed geo risk from IPInfo privacy context</td></tr>
+      <tr><td><code>risk_score</code></td><td>float</td><td>ML Stack</td><td>Maliciousness probability [0, 1]</td></tr>
+      <tr><td><code>risk_level</code></td><td>enum</td><td>Thresholding</td><td>LOW / MEDIUM / HIGH</td></tr>
+      <tr><td><code>shap_values</code></td><td>object</td><td>SHAP</td><td>Per-feature SHAP φ contributions</td></tr>
+      <tr><td><code>freshness</code></td><td>float</td><td>Derived</td><td>Temporal relevance score [0, 1]</td></tr>
+    </tbody>
+  </table>
+  <div class="doc-nav"><a href="#" onclick="goSection('risk','risk-results');return false;">← Results</a><span></span></div>
+</div>
 
-        <h2 class="section-title" id="api-schema">Data Schema Reference</h2>
-        <table>
-          <thead><tr><th>Field</th><th>Type</th><th>Source</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td><code>ip</code></td><td>string</td><td>Feed</td><td>IPv4 address (canonical)</td></tr>
-            <tr><td><code>source</code></td><td>string</td><td>Feed</td><td>Origin feed identifier</td></tr>
-            <tr><td><code>abuse_reports</code></td><td>int</td><td>AbuseIPDB</td><td>Total abuse report count</td></tr>
-            <tr><td><code>confidence_pct</code></td><td>float</td><td>AbuseIPDB</td><td>Weighted confidence 0–100</td></tr>
-            <tr><td><code>recency_hrs</code></td><td>float</td><td>Derived</td><td>Hours since last report</td></tr>
-            <tr><td><code>virustotal_detections</code></td><td>int</td><td>VirusTotal</td><td>Number of vendor detections</td></tr>
-            <tr><td><code>risk_score</code></td><td>float</td><td>ML Stack</td><td>Maliciousness probability [0, 1]</td></tr>
-            <tr><td><code>risk_level</code></td><td>enum</td><td>Thresholding</td><td>LOW / MEDIUM / HIGH</td></tr>
-            <tr><td><code>shap_values</code></td><td>object</td><td>SHAP</td><td>Per-feature SHAP φ contributions</td></tr>
-            <tr><td><code>freshness</code></td><td>float</td><td>Derived</td><td>Temporal relevance score [0, 1]</td></tr>
-          </tbody>
-        </table>
+</div><!-- /content -->
 
-        <div class="doc-nav">
-          <a href="#" onclick="goSection('risk','risk-results');return false;">← Results</a>
-          <span></span>
-        </div>
-      </div>
-
-    </div><!-- /content -->
-
-    <!-- TABLE OF CONTENTS -->
-    <div class="toc">
-      <div class="toc-title">On This Page</div>
-      <div id="toc-links"></div>
-    </div>
-  </main>
+<div class="toc">
+  <div class="toc-title">On This Page</div>
+  <div id="toc-links"></div>
+</div>
+</main>
 </div>
 
 <script>
-// ── Page navigation ──
-const pages = ['overview','quickstart','architecture','ml','shap','risk','api'];
-const pageTocMap = {
-  overview: [
-    {label:'Introduction',id:'intro'},
-    {label:'What is SentinelTI?',id:'intro',sub:true},
-    {label:'Problems Solved',id:'intro',sub:true},
-    {label:'Tech Stack',id:'intro',sub:true},
-  ],
-  quickstart:[
-    {label:'Installation',id:'qs-install'},
-    {label:'Configuration',id:'qs-config',sub:true},
-    {label:'Running SentinelTI',id:'qs-run',sub:true},
-  ],
-  architecture:[
-    {label:'Full Pipeline',id:'arch-pipeline'},
-    {label:'Async Enrichment',id:'arch-enrichment',sub:true},
-    {label:'MongoDB Schema',id:'arch-storage',sub:true},
-  ],
-  ml:[
-    {label:'Feature Engineering',id:'ml-features'},
-    {label:'Random Forest',id:'ml-rf',sub:true},
-    {label:'XGBoost',id:'ml-xgb',sub:true},
-    {label:'Stacking Ensemble',id:'ml-stack',sub:true},
-  ],
-  shap:[
-    {label:'Global Importance',id:'shap-global'},
-    {label:'Local Per-IP',id:'shap-local',sub:true},
-    {label:'Interpreting Output',id:'shap-interp',sub:true},
-  ],
-  risk:[
-    {label:'Risk Levels',id:'risk-levels'},
-    {label:'Evaluation Metrics',id:'risk-metrics',sub:true},
-    {label:'Benchmark Results',id:'risk-results',sub:true},
-  ],
-  api:[
-    {label:'Endpoints',id:'api-endpoints'},
-    {label:'Threat Feeds',id:'api-feeds',sub:true},
-    {label:'Data Schema',id:'api-schema',sub:true},
-  ]
+const pages=['overview','quickstart','architecture','ml','shap','risk','api'];
+const tocMap={
+  overview:[{label:'What is SentinelTI?',id:'intro'},{label:'Problems Solved',id:'intro',sub:true},{label:'Tech Stack',id:'intro',sub:true}],
+  quickstart:[{label:'Installation',id:'qs-install'},{label:'Configuration',id:'qs-config',sub:true},{label:'Running SentinelTI',id:'qs-run',sub:true}],
+  architecture:[{label:'Framework Diagram',id:'arch-diagram'},{label:'Async Enrichment',id:'arch-enrichment',sub:true},{label:'IPInfo Integration',id:'arch-ipinfo',sub:true},{label:'MongoDB Schema',id:'arch-storage',sub:true}],
+  ml:[{label:'Feature Engineering',id:'ml-features'},{label:'Random Forest',id:'ml-rf',sub:true},{label:'XGBoost',id:'ml-xgb',sub:true},{label:'Stacking Ensemble',id:'ml-stack',sub:true}],
+  shap:[{label:'Global Importance',id:'shap-global'},{label:'Local Per-IP',id:'shap-local',sub:true},{label:'Interpreting Output',id:'shap-interp',sub:true}],
+  risk:[{label:'Risk Levels',id:'risk-levels'},{label:'Eval Metrics',id:'risk-metrics',sub:true},{label:'Benchmark Results',id:'risk-results',sub:true}],
+  api:[{label:'Endpoints',id:'api-endpoints'},{label:'Threat Feeds',id:'api-feeds',sub:true},{label:'Data Schema',id:'api-schema',sub:true}]
 };
 
 function showPage(name){
   pages.forEach(p=>{
-    const el = document.getElementById('page-'+p);
-    if(el) el.classList.toggle('active', p===name);
+    document.getElementById('page-'+p)?.classList.toggle('active',p===name);
+    document.getElementById('nav-'+p)?.classList.toggle('active',p===name);
+    document.getElementById('sub-'+p)?.classList.toggle('open',p===name);
   });
-  // nav highlight
-  ['overview','quickstart','api'].forEach(n=>{
-    const el = document.getElementById('nav-'+n);
-    if(el) el.classList.toggle('active', n===name);
-  });
-  // sidebar links
-  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
-  // toc
-  buildToc(name);
-  window.scrollTo(0,0);
+  buildToc(name);window.scrollTo(0,0);
 }
-
-function goSection(page, sectionId){
-  showPage(page);
-  setTimeout(()=>{
-    const el = document.getElementById(sectionId);
-    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-  }, 60);
-}
-
+function scrollTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+function goSection(page,id){showPage(page);setTimeout(()=>scrollTo(id),80);}
 function buildToc(page){
-  const toc = document.getElementById('toc-links');
-  const items = pageTocMap[page] || [];
-  toc.innerHTML = items.map(i=>
-    `<a class="toc-link ${i.sub?'sub':''}" href="#" onclick="document.getElementById('${i.id}')?.scrollIntoView({behavior:'smooth'});return false;">${i.label}</a>`
+  document.getElementById('toc-links').innerHTML=(tocMap[page]||[]).map(i=>
+    `<a class="toc-link${i.sub?' sub':''}" href="#" onclick="scrollTo('${i.id}');return false;">${i.label}</a>`
   ).join('');
 }
-
-// ── Code tab switching ──
-function switchTab(btn, targetId){
-  const block = btn.closest('.code-block');
-  block.querySelectorAll('.code-tab').forEach(t=>t.classList.remove('active'));
-  block.querySelectorAll('.code-pane').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  const pane = document.getElementById(targetId);
-  if(pane) pane.classList.add('active');
+function switchTab(btn,id){
+  const b=btn.closest('.code-block');
+  b.querySelectorAll('.code-tab').forEach(t=>t.classList.remove('active'));
+  b.querySelectorAll('.code-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id)?.classList.add('active');
 }
-
-// ── Copy code ──
 function copyCode(btn){
-  const pre = btn.closest('.code-block').querySelector('pre');
-  const text = pre ? pre.innerText : '';
-  navigator.clipboard.writeText(text).then(()=>{
-    btn.textContent = 'Copied!';
-    setTimeout(()=>btn.textContent='Copy', 1500);
-  });
+  const t=btn.closest('.code-block').querySelector('pre')?.innerText||'';
+  navigator.clipboard.writeText(t).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500);});
 }
-
-// ── Init ──
 buildToc('overview');
 </script>
 </body>
