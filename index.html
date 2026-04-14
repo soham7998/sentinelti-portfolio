@@ -316,7 +316,7 @@ tr:hover td{background:var(--surface2);}
   <h2 class="section-title">What is SentinelTI?</h2>
   <p>SentinelTI is an asynchronous threat intelligence platform that addresses three core failure modes of traditional blacklist-based systems: <strong>high false-positive rates</strong>, <strong>opaque decision-making</strong>, and <strong>delayed threat visibility</strong>.</p>
   <p>The framework ingests IP indicators from open-source feeds in real time, enriches them asynchronously — including IP location and ASN context via <strong>IPInfo</strong> — and runs a stacking ensemble of <strong>Random Forest + XGBoost</strong> to produce a dynamic maliciousness risk score explained by <strong>SHAP</strong>.</p>
-  <div class="callout"><div class="callout-title">📄 Research Paper</div><p><em>"An Explainable Machine Learning Framework for IP Threat Intelligence and Maliciousness Risk Scoring"</em> — Soham Shah &amp; Mousmi Pawar, Somaiya Vidyavihar University. IEEE Publication.</p></div>
+  <div class="callout"><div class="callout-title"> Research Paper</div><p><em>"An Explainable Machine Learning Framework for IP Threat Intelligence and Maliciousness Risk Scoring"</em> — Soham Shah &amp; Mousmi Pawar, Somaiya Vidyavihar University. IEEE Publication.</p></div>
   <h2 class="section-title">Core Problems Solved</h2>
   <table>
     <thead><tr><th>Traditional Problem</th><th>SentinelTI Solution</th></tr></thead>
@@ -411,7 +411,7 @@ python src/enrichment/enrich_worker.py</pre></div>
     <div class="code-pane" id="tab-l3"><pre><span class="hl-green"># Launch Streamlit dashboard</span>
 streamlit run dashboard/app.py --server.port 8501</pre></div>
   </div>
-  <div class="callout"><div class="callout-title">✅ Success</div><p>IOCs appear on the dashboard within ~30 seconds. Full SHAP scores with IPInfo location data arrive within ~60 seconds of ingestion.</p></div>
+  <div class="callout"><div class="callout-title"> Success</div><p>IOCs appear on the dashboard within ~30 seconds. Full SHAP scores with IPInfo location data arrive within ~60 seconds of ingestion.</p></div>
   <div class="doc-nav"><a href="#" onclick="goSection('overview','intro');return false;">← Introduction</a><a href="#" onclick="goSection('architecture','arch-diagram');return false;">Architecture →</a></div>
 </div>
 
@@ -431,7 +431,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
 
     <div class="pd-node accent">
       <div class="pd-node-badge">Input Layer</div>
-      <div class="pd-node-title">📡 External Threat Feeds</div>
+      <div class="pd-node-title"> External Threat Feeds</div>
       <div class="pd-node-sub">
         <span class="hi-g">Abuse.ch</span> (Primary) &nbsp;·&nbsp; <span class="hi-g">CINS Army</span> (Supplementary)
       </div>
@@ -449,7 +449,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
     <div class="pd-arrow"></div>
 
     <div class="pd-node">
-      <div class="pd-node-title">🔍 Asynchronous Enrichment</div>
+      <div class="pd-node-title"> Asynchronous Enrichment</div>
       <div class="pd-node-sub">
         <span class="hi">VirusTotal</span> &nbsp;·&nbsp; <span class="hi">AbuseIPDB</span> &nbsp;·&nbsp; <span class="hi-g">IPInfo</span> &nbsp;·&nbsp; <span class="hi">ASN</span>
       </div>
@@ -461,7 +461,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
     <div class="pd-db-wrap">
       <div class="pd-db-cap"></div>
       <div class="pd-db-body">
-        <div class="pd-db-title">💾 MongoDB IOC Store</div>
+        <div class="pd-db-title"> MongoDB IOC Store</div>
         <div class="pd-db-sub">Timestamps &nbsp;·&nbsp; Features &nbsp;·&nbsp; Scores</div>
       </div>
       <div class="pd-db-cap-bot"></div>
@@ -470,7 +470,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
     <div class="pd-arrow"></div>
 
     <div class="pd-node">
-      <div class="pd-node-title">🤖 ML Risk Scoring Engine</div>
+      <div class="pd-node-title"> ML Risk Scoring Engine</div>
       <div class="pd-node-sub">
         Random Forest + XGBoost &nbsp;·&nbsp; Risk Score <span class="hi">0 → 1</span>
       </div>
@@ -479,7 +479,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
     <div class="pd-arrow"></div>
 
     <div class="pd-node">
-      <div class="pd-node-title">✨ SHAP Explainability</div>
+      <div class="pd-node-title"> SHAP Explainability</div>
       <div class="pd-node-sub">
         Global Feature Importance &nbsp;·&nbsp; Local Per-IP Explanation
       </div>
@@ -488,7 +488,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
     <div class="pd-arrow"></div>
 
     <div style="max-width:400px;width:100%;text-align:center;margin-bottom:8px;">
-      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-bottom:10px;">📊 Actionable SOC Dashboard — Evidence-based Decisions</div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-bottom:10px;"> Actionable SOC Dashboard — Evidence-based Decisions</div>
     </div>
     <div class="pd-risk-row">
       <div class="pd-risk-chip low">LOW</div>
@@ -508,7 +508,7 @@ streamlit run dashboard/app.py --server.port 8501</pre></div>
   </ol>
 
   <h3 class="sub-title" id="arch-ipinfo">IPInfo Integration</h3>
-  <div class="callout info"><div class="callout-title">💡 Why IPInfo?</div><p>IPInfo replaces static GeoIP databases with a live API that provides richer context: city/region/country, organization, ASN, and critically — <strong>privacy flags</strong> (VPN, proxy, Tor detection). These flags are strong threat indicators fed directly into the ML feature vector as <code>ipinfo_geo_risk</code>.</p></div>
+  <div class="callout info"><div class="callout-title"> Why IPInfo?</div><p>IPInfo replaces static GeoIP databases with a live API that provides richer context: city/region/country, organization, ASN, and critically — <strong>privacy flags</strong> (VPN, proxy, Tor detection). These flags are strong threat indicators fed directly into the ML feature vector as <code>ipinfo_geo_risk</code>.</p></div>
   <div class="code-block">
     <div class="code-header"><span class="code-lang">python · IPInfo enrichment</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
     <pre><span class="hl-green">import</span> ipinfo, os
@@ -611,7 +611,7 @@ xgb_probs = xgb.predict_proba(X_test)[:, <span class="hl-cyan">1</span>]</pre>
   <h2 class="section-title" id="ml-stack">Stacking Ensemble</h2>
   <div class="formula">ŷᵢ_stack = β₀ + β₁·P_RF(y=1|xᵢ) + β₂·P_XGB(y=1|xᵢ)</div>
   <div class="formula">P_final(y=1|xᵢ) = sigmoid(ŷᵢ_stack)</div>
-  <div class="callout"><div class="callout-title">💡 Why a linear meta-learner?</div><p>The β₁ and β₂ coefficients directly expose the relative trust in each base model — maintaining full explainability at every hierarchy level.</p></div>
+  <div class="callout"><div class="callout-title"> Why a linear meta-learner?</div><p>The β₁ and β₂ coefficients directly expose the relative trust in each base model — maintaining full explainability at every hierarchy level.</p></div>
   <div class="code-block">
     <div class="code-header"><span class="code-lang">python</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
     <pre><span class="hl-green">from</span> sklearn.linear_model <span class="hl-green">import</span> LogisticRegression
